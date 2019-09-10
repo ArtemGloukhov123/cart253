@@ -15,13 +15,20 @@ let squareX;
 let squareY;
 let squareSize = 100;
 
+let catPic;     //picture of a sad cat
+
+let picWidth = 400;   //catPic width
+let picHeight = 250;  //catPic height
+let picX = -picWidth; //cat pic starts off left side of canvas
+let picY = 320;       //cat pic is centered vertically
 
 // preload()
 //
 // Nothing here
 
-function preload() {
-
+function preload()
+{
+catPic  = loadImage("assets/images/cryingcat.jpg");  //preloads picture to save loading times
 }
 
 
@@ -47,6 +54,9 @@ function setup() {
   rectMode(CENTER);
   // We won't have a stroke in this
   noStroke();
+
+  imageMode(CENTER);
+
 }
 
 
@@ -73,4 +83,6 @@ function draw() {
   fill(0,0,255,10);
   // Display the square
   rect(squareX,squareY,squareSize,squareSize);
+  image(catPic, picX, picY, picWidth, picHeight);
+  picX ++;
 }
