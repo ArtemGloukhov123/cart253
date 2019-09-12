@@ -22,9 +22,12 @@ let picHeight = 250;  //catPic height
 let picX = -picWidth; //cat pic starts off left side of canvas
 let picY = 320;       //cat pic is centered vertically
 
+let exampleText = "example text";
+
 // preload()
 //
 // Nothing here
+
 
 function preload()
 {
@@ -65,24 +68,34 @@ function setup() {
 // Change the circle and square's positions so they move
 // Draw the circle and square on screen
 
-function draw() {
+function draw()
+{
   // We don't fill the background so we get a drawing effect
 
   // Move circle up and to the right
   circleX += 1;
   circleY -= 1;
+
   // Make the circle transparent red
   fill(255,0,0,10);
+
   // Display the circle
   ellipse(circleX,circleY,circleSize,circleSize);
 
   // Move square up and to the left
   squareX -= 1;
   squareY -= 1;
+
   // Make the square transparent blue
   fill(0,0,255,10);
+
   // Display the square
   rect(squareX,squareY,squareSize,squareSize);
-  image(catPic, picX, picY, picWidth, picHeight);
-  picX ++;
+
+  image(catPic, picX, picY, picWidth, picHeight); //display cat picture
+  picX ++;      //have the picture move from left to right
+
+  //display black text
+  fill(255);
+  text(exampleText, mouseX, mouseY):
 }
