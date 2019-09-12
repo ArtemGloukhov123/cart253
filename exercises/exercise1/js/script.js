@@ -72,6 +72,13 @@ function draw()
 {
   // We don't fill the background so we get a drawing effect
 
+  image(catPic, picX, picY, picWidth, picHeight); //display cat picture
+  picX ++;      //have the picture move from left to right
+
+  //display black text
+  fill(255);
+  text(exampleText, mouseX, mouseY):
+
   // Move circle up and to the right
   circleX += 1;
   circleY -= 1;
@@ -92,10 +99,4 @@ function draw()
   // Display the square
   rect(squareX,squareY,squareSize,squareSize);
 
-  image(catPic, picX, picY, picWidth, picHeight); //display cat picture
-  picX ++;      //have the picture move from left to right
-
-  //display black text
-  fill(255);
-  text(exampleText, mouseX, mouseY):
 }
