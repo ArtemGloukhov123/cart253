@@ -82,8 +82,8 @@ function draw()
   picX ++;      //have the picture move from left to right
 
   image(clownPic, clownPicX, clownPicY, clownPicWidth, clownPicHeight);
-  clownPicX = clownPicX + 0.5;
-  clownPicY = 50 * (sin(0.1 * clownPicX)) + 320;
+  clownPicX = clownPicX + 0.5;      //clown pic slowly moves across screen
+  clownPicY = 50 * (sin(0.1 * clownPicX)) + 320;    //the clown pic moves in a sine wave
 
   //display black text
   fill(0);
