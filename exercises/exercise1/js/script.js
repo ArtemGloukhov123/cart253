@@ -22,6 +22,11 @@ let picHeight = 250;  //catPic height
 let picX = -picWidth; //cat pic starts off left side of canvas
 let picY = 320;       //cat pic is centered vertically
 
+let clownPicWidth = 200;
+let clownPicHeight = 200;
+let clownPicX = -clownPicWidth; //clown picture starts off left side of createCanvas
+let clownPicY = 320;            //clown pic is centered vertically
+
 let exampleText = "example text";
 
 // preload()
@@ -32,6 +37,7 @@ let exampleText = "example text";
 function preload()
 {
 catPic  = loadImage("assets/images/cryingcat.jpg");  //preloads picture to save loading times
+clownPic = loadImage("assets/images/clown.png")      //preloads picture of clown
 }
 
 
@@ -75,9 +81,13 @@ function draw()
   image(catPic, picX, picY, picWidth, picHeight); //display cat picture
   picX ++;      //have the picture move from left to right
 
+  image(clownPic, clownPicX, clownPicY, clownPicWidth, clownPicHeight);
+  clownPicX = clownPicX + 0.5;
+  clownPicY = 50 * (sin(0.1 * clownPicX)) + 320;
+
   //display black text
-  fill(255);
-  text(exampleText, mouseX, mouseY):
+  fill(0);
+  text(exampleText, mouseX, mouseY);
 
   // Move circle up and to the right
   circleX += 1;
