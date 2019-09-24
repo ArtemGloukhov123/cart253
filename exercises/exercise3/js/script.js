@@ -3,16 +3,22 @@
 /******************************************************************************
 Where's Sausage Dog?
 by Pippin Barr
-
 An algorithmic version of a Where's Wally/Waldo searching game where you
 need to click on the sausage dog you're searching for in amongst all
 the visual noise of other animals.
-
 Animal images from:
 https://creativenerds.co.uk/freebies/80-free-wildlife-icons-the-best-ever-animal-icon-set/
 ******************************************************************************/
 
 // Position and image of the sausage dog we're searching for
+let displayWidth = 200;   //width of display window of target
+let displayHeight = 200;  //height of display window
+let displayX;             //x position of display window
+let displayY;             //y position of display window
+
+let help = "Help me!"
+let lost = "I'm lost!"
+
 let targetX;
 let targetY;
 let targetImage;
@@ -59,6 +65,10 @@ function preload() {
 // Creates the canvas, sets basic modes, draws correct number
 // of decoys in random positions, then the target
 function setup() {
+
+  displayX = windowWidth - displayWidth/2;
+  displayY = displayHeight/2;
+
   createCanvas(windowWidth,windowHeight);
   background("#ffff00");
   imageMode(CENTER);
@@ -104,6 +114,23 @@ function setup() {
     else if (r < 1.0) {
       image(decoyImage10,x,y);
     }
+
+    rectMode(CENTER);     //setting as CENTER to have dog and rectangle centered
+
+    strokeWeight(10);
+    stroke(255, 100, 100);                                    //pink border
+    fill(255);
+    rect(displayX, displayY, displayWidth, displayHeight);    //display window
+    image(targetImage, displayX, displayY);                   //image of weiner dog in display window
+
+    noStroke();
+    fill(0);
+    textFont("Helvetica");
+    textStyle(BOLD);
+    textSize(35);
+    textAlign(CENTER);
+    text(help, displayX, displayY/2);       //"Help me!"
+    text(lost, displayX, displayY*1.8);     //"I'm lost!"
   }
 
   // Once we've displayed all decoys, we choose a random location for the target
