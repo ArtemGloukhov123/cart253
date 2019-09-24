@@ -23,6 +23,9 @@ let targetX;
 let targetY;
 let targetImage;
 
+let targetVx;
+let targetVy;
+
 // The ten decoy images
 let decoyImage1;
 let decoyImage2;
@@ -66,11 +69,14 @@ function preload() {
 // of decoys in random positions, then the target
 function setup() {
 
+  targetVx = random(-10,10);
+  targetVy = random(-10,10);
+
   displayX = windowWidth - displayWidth/2;
   displayY = displayHeight/2;
 
   createCanvas(windowWidth,windowHeight);
-  background("#ffff00");
+  background("#ffcc66");
   imageMode(CENTER);
 
   // Use a for loop to draw as many decoys as we need
@@ -146,14 +152,18 @@ function setup() {
 //
 // Displays the game over screen if the player has won,
 // otherwise nothing (all the gameplay stuff is in mousePressed())
-function draw() {
-  if (gameOver) {
+function draw()
+{
+
+  if (gameOver)
+  {
     // Prepare our typography
     textFont("Helvetica");
     textSize(128);
     textAlign(CENTER,CENTER);
-    noStroke();
-    fill(random(255));
+    stroke(0);
+    strokeWeight(5);        //added a stroke, felt it looked nicer
+    fill(random(50, 200));
 
     // Tell them they won!
     text("YOU WINNED!",width/2,height/2);
@@ -161,25 +171,64 @@ function draw() {
     // Draw a circle around the sausage dog to show where it is (even though
     // they already know because they found it!)
     noFill();
-    stroke(random(255));
-    strokeWeight(10);
+    stroke(random(50, 200));
+    strokeWeight(15);
     ellipse(targetX,targetY,targetImage.width,targetImage.height);
+
+    image(targetImage,targetX,targetY);
+    targetMove();
+    bounce();
   }
 }
 
 // mousePressed()
 //
 // Checks if the player clicked on the target and if so tells them they won
-function mousePressed() {
+function mousePressed()
+{
   // The mouse was clicked!
   // Check if the cursor is in the x range of the target
   // (We're subtracting the image's width/2 because we're using imageMode(CENTER) -
   // the key is we want to determine the left and right edges of the image.)
-  if (mouseX > targetX - targetImage.width/2 && mouseX < targetX + targetImage.width/2) {
+  if (mouseX > targetX - targetImage.width/2 && mouseX < targetX + targetImage.width/2)
+  {
     // Check if the cursor is also in the y range of the target
     // i.e. check if it's within the top and bottom of the image
-    if (mouseY > targetY - targetImage.height/2 && mouseY < targetY + targetImage.height/2) {
+    if (mouseY > targetY - targetImage.height/2 && mouseY < targetY + targetImage.height/2)
+    {
       gameOver = true;
     }
   }
+}
+
+function targetMove()
+{
+  if(gameOver === true)
+  {
+    targetX = targetX + targetVx;
+    targetY = targetY + targetVy;
+  }
+}
+
+function bounce()
+{
+  if(targetX >= width)
+  {
+    targetVx = -targetVx;
+  }
+
+    if(targetY >= height)
+    {
+      targetVy = -targetVy;
+    }
+
+    if(targetX <= 0)
+    {
+      targetVx = -targetVx;
+    }
+
+      if(targetY <= 0)
+      {
+        targetVy = -targetVy;
+      }
 }
