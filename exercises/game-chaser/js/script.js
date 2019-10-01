@@ -17,6 +17,7 @@ random movement, screen wrap.
 
 // Track whether the game is over
 let gameOver = false;
+let testVariable;
 
 // Player position, size, velocity
 let playerX;
