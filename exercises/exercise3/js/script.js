@@ -228,6 +228,7 @@ function bounce()
       targetVy = -targetVy;
     }
 
+
     if(targetX <= 0) //if target reaches left side
     {
       targetVx = -targetVx;
