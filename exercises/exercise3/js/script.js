@@ -17,14 +17,17 @@ let displayX;             //x position of display window
 let displayY;             //y position of display window
 
 let help = "Help me!"
-let lost = "I'm lost!"
+let lost = "I'm lost!"    //messages in the display box
 
 let targetX;
 let targetY;
-let targetImage;
+let targetImage;          //sausage dog picture
 
-let targetVx;
-let targetVy;
+let targetVx;             //x velocity of target
+let targetVy;             //y velocity of target
+
+let targetWidth;          //width of the image
+let targetHeight;         //height of the image
 
 // The ten decoy images
 let decoyImage1;
@@ -69,10 +72,10 @@ function preload() {
 // of decoys in random positions, then the target
 function setup() {
 
-  targetVx = random(-10,10);
+  targetVx = random(-10,10);    //chooses random direction for dog to fly when found
   targetVy = random(-10,10);
 
-  displayX = windowWidth - displayWidth/2;
+  displayX = windowWidth - displayWidth/2;  //place display window in top right corner of screen
   displayY = displayHeight/2;
 
   createCanvas(windowWidth,windowHeight);
@@ -159,14 +162,14 @@ function draw()
   {
     // Prepare our typography
     textFont("Helvetica");
-    textSize(128);
+    textSize(75);
     textAlign(CENTER,CENTER);
     stroke(0);
     strokeWeight(5);        //added a stroke, felt it looked nicer
     fill(random(50, 200));
 
     // Tell them they won!
-    text("YOU WINNED!",width/2,height/2);
+    text("YOU FOUND ME!",width/2,height/2);
 
     // Draw a circle around the sausage dog to show where it is (even though
     // they already know because they found it!)
@@ -175,9 +178,12 @@ function draw()
     strokeWeight(15);
     ellipse(targetX,targetY,targetImage.width,targetImage.height);
 
-    image(targetImage,targetX,targetY);
-    targetMove();
-    bounce();
+    targetWidth = random(30, 300);
+    targetHeight = random(30, 300);   //the dog's size and proportions change
+
+    image(targetImage,targetX,targetY, targetWidth, targetHeight);
+    targetMove();   //target starts flying in random direction and speed
+    bounce();       //target bounces off edges of window
   }
 }
 
@@ -205,29 +211,29 @@ function targetMove()
 {
   if(gameOver === true)
   {
-    targetX = targetX + targetVx;
+    targetX = targetX + targetVx;     //send the dog flying
     targetY = targetY + targetVy;
   }
 }
 
 function bounce()
 {
-  if(targetX >= width)
+  if(targetX >= width) //if target reaches right side
   {
-    targetVx = -targetVx;
+    targetVx = -targetVx; //invert horizontal movement
   }
 
-    if(targetY >= height)
+    if(targetY >= height) //if target reaches bottom side
     {
       targetVy = -targetVy;
     }
 
-    if(targetX <= 0)
+    if(targetX <= 0) //if target reaches left side
     {
       targetVx = -targetVx;
     }
 
-      if(targetY <= 0)
+      if(targetY <= 0) //if target reaches top side
       {
         targetVy = -targetVy;
       }
