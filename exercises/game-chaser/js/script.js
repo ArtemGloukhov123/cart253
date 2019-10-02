@@ -26,6 +26,7 @@ let playerRadius = 25;
 let playerVX = 0;
 let playerVY = 0;
 let playerMaxSpeed = 2;
+let playerSprintSpeed = 4;
 // Player health
 let playerHealth;
 let playerMaxHealth = 255;
@@ -121,26 +122,53 @@ function draw() {
 // Checks arrow keys and adjusts player velocity accordingly
 function handleInput() {
   // Check for horizontal movement
-  if (keyIsDown(LEFT_ARROW)) {
-    playerVX = -playerMaxSpeed;
-  }
-  else if (keyIsDown(RIGHT_ARROW)) {
-    playerVX = playerMaxSpeed;
-  }
-  else {
-    playerVX = 0;
+
+if (!keyIsDown(SHIFT)) {
+    if (keyIsDown(LEFT_ARROW)) {
+      playerVX = -playerMaxSpeed;
+    }
+    else if (keyIsDown(RIGHT_ARROW)) {
+      playerVX = playerMaxSpeed;
+    }
+    else {
+      playerVX = 0;
+    }
+
+    // Check for vertical movement
+    if (keyIsDown(UP_ARROW)) {
+      playerVY = -playerMaxSpeed;
+    }
+    else if (keyIsDown(DOWN_ARROW)) {
+      playerVY = playerMaxSpeed;
+    }
+    else {
+      playerVY = 0;
+    }
   }
 
-  // Check for vertical movement
-  if (keyIsDown(UP_ARROW)) {
-    playerVY = -playerMaxSpeed;
+  else{
+    if (keyIsDown(LEFT_ARROW)) {
+      playerVX = -playerSprintSpeed;
+    }
+    else if (keyIsDown(RIGHT_ARROW)) {
+      playerVX = playerSprintSpeed;
+    }
+    else {
+      playerVX = 0;
+    }
+
+    // Check for vertical movement
+    if (keyIsDown(UP_ARROW)) {
+      playerVY = -playerSprintSpeed;
+    }
+    else if (keyIsDown(DOWN_ARROW)) {
+      playerVY = playerSprintSpeed;
+    }
+    else {
+      playerVY = 0;
+    }
   }
-  else if (keyIsDown(DOWN_ARROW)) {
-    playerVY = playerMaxSpeed;
-  }
-  else {
-    playerVY = 0;
-  }
+
 }
 
 // movePlayer()
@@ -223,6 +251,7 @@ function checkEating() {
 // Moves the prey based on random velocity changes
 function movePrey() {
   //maps the values of the noise "0 to 1" to ""-preyMaxSpeed to +preyMaxSpeed"
+  //without mapping, the prey only moves in +x and +y directions, so bottom right
   preyVX = map(noise(tx), 0, 1, -preyMaxSpeed, preyMaxSpeed);
   preyVY = map(noise(ty), 0, 1, -preyMaxSpeed, preyMaxSpeed);
 
