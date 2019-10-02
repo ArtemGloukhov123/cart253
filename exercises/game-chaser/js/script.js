@@ -38,7 +38,10 @@ let preyY;
 let preyRadius = 25;
 let preyVX;
 let preyVY;
-let preyMaxSpeed = 4;
+let preyMaxSpeed = 5;
+//times used for perlin function
+let tx;
+let ty;
 // Prey health
 let preyHealth;
 let preyMaxHealth = 100;
@@ -54,6 +57,9 @@ let preyEaten = 0;
 //
 // Sets up the basic elements of the game
 function setup() {
+  tx = random(0,1000);
+  ty = random(0,1000);
+
   createCanvas(500, 500);
 
   noStroke();
@@ -216,18 +222,12 @@ function checkEating() {
 //
 // Moves the prey based on random velocity changes
 function movePrey() {
-  // Change the prey's velocity at random intervals
-  // random() will be < 0.05 5% of the time, so the prey
-  // will change direction on 5% of frames
-  if (random() < 0.05) {
-    // Set velocity based on random values to get a new direction
-    // and speed of movement
-    //
-    // Use map() to convert from the 0-1 range of the random() function
-    // to the appropriate range of velocities for the prey
-    preyVX = map(random(), 0, 1, -preyMaxSpeed, preyMaxSpeed);
-    preyVY = map(random(), 0, 1, -preyMaxSpeed, preyMaxSpeed);
-  }
+  //maps the values of the noise "0 to 1" to ""-preyMaxSpeed to +preyMaxSpeed"
+  preyVX = map(noise(tx), 0, 1, -preyMaxSpeed, preyMaxSpeed);
+  preyVY = map(noise(ty), 0, 1, -preyMaxSpeed, preyMaxSpeed);
+
+  tx += 0.07;
+  ty += 0.07;
 
   // Update prey position based on velocity
   preyX = preyX + preyVX;
