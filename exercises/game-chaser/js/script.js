@@ -50,7 +50,7 @@ let preyMaxHealth = 100;
 let preyFill = 200;
 
 // Amount of health obtained per frame of "eating" (overlapping) the prey
-let eatHealth = 10;
+let eatHealth = 20;
 // Number of prey eaten during the game (the "score")
 let preyEaten = 0;
 
@@ -207,7 +207,7 @@ function movePlayer() {
 function updateHealth() {
   // Reduce player health
   if (keyIsDown(SHIFT)){
-    playerHealth = playerHealth - 1.8;
+    playerHealth = playerHealth - 1.2;
   }
   else {
     playerHealth = playerHealth - 0.5;
@@ -296,8 +296,12 @@ function drawPrey() {
 //
 // Draw the player as an ellipse with alpha value based on health
 function drawPlayer() {
+  let playerSize;
+
+  playerSize = playerRadius * 2 + preyEaten * 5;
+
   fill(playerFill, playerHealth);
-  ellipse(playerX, playerY, playerRadius * 2);
+  ellipse(playerX, playerY, playerSize);
 }
 
 // showGameOver()
