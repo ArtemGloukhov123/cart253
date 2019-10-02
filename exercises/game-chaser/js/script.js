@@ -219,7 +219,7 @@ function updateHealth() {
     // If so, the game is over
     gameOver = true;
   }
-  console.log("player health is " + playerHealth);
+  console.log("prey health is " + preyHealth);
 }
 
 // checkEating()
@@ -237,7 +237,8 @@ function checkEating() {
     // Reduce the prey health
     preyHealth = preyHealth - eatHealth;
     // Constrain to the possible range
-    preyHealth = constrain(preyHealth, 0, preyMaxHealth);
+    //altered the constraint to account for prey gaining health as game goes
+    preyHealth = constrain(preyHealth, 0, 300);
 
     // Check if the prey died (health 0)
     if (preyHealth === 0) {
@@ -245,7 +246,7 @@ function checkEating() {
       preyX = random(0, width);
       preyY = random(0, height);
       // Give it full health
-      preyHealth = preyMaxHealth;
+      preyHealth = preyMaxHealth + preyEaten * 10;
       // Track how many prey were eaten
       preyEaten = preyEaten + 1;
     }
