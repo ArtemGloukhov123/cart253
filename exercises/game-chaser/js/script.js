@@ -27,11 +27,14 @@ let playerVX = 0;
 let playerVY = 0;
 let playerMaxSpeed = 2;
 let playerSprintSpeed = 4;
+let playerSpeedConstraint;
 // Player health
 let playerHealth;
 let playerMaxHealth = 255;
 // Player fill color
 let playerFill = 50;
+
+let playerSize;
 
 // Prey position, size, velocity
 let preyX;
@@ -121,37 +124,40 @@ function draw() {
 //
 // Checks arrow keys and adjusts player velocity accordingly
 function handleInput() {
+//The more the player eats, the
+playerSpeedConstraint = sqrt(0.05 * preyEaten);
   // Check for horizontal movement
 
-if (!keyIsDown(SHIFT)) {
+  //check if player is sprinting
+  if (!keyIsDown(SHIFT)) {
     if (keyIsDown(LEFT_ARROW)) {
-      playerVX = -playerMaxSpeed;
+      playerVX = -playerMaxSpeed + playerSpeedConstraint;
     }
-    else if (keyIsDown(RIGHT_ARROW)) {
-      playerVX = playerMaxSpeed;
-    }
-    else {
-      playerVX = 0;
-    }
+      else if (keyIsDown(RIGHT_ARROW)) {
+        playerVX = playerMaxSpeed - playerSpeedConstraint;
+      }
+      else {
+        playerVX = 0;
+      }
 
     // Check for vertical movement
     if (keyIsDown(UP_ARROW)) {
-      playerVY = -playerMaxSpeed;
+      playerVY = -playerMaxSpeed + playerSpeedConstraint;
     }
-    else if (keyIsDown(DOWN_ARROW)) {
-      playerVY = playerMaxSpeed;
-    }
-    else {
-      playerVY = 0;
-    }
+      else if (keyIsDown(DOWN_ARROW)) {
+        playerVY = playerMaxSpeed - playerSpeedConstraint;
+      }
+      else {
+        playerVY = 0;
+      }
   }
 
   else{
     if (keyIsDown(LEFT_ARROW)) {
-      playerVX = -playerSprintSpeed;
+      playerVX = -playerSprintSpeed + 1.5 * playerSpeedConstraint;
     }
     else if (keyIsDown(RIGHT_ARROW)) {
-      playerVX = playerSprintSpeed;
+      playerVX = playerSprintSpeed - 1.5 * playerSpeedConstraint;
     }
     else {
       playerVX = 0;
@@ -159,10 +165,10 @@ if (!keyIsDown(SHIFT)) {
 
     // Check for vertical movement
     if (keyIsDown(UP_ARROW)) {
-      playerVY = -playerSprintSpeed;
+      playerVY = -playerSprintSpeed + 1.5 * playerSpeedConstraint;
     }
     else if (keyIsDown(DOWN_ARROW)) {
-      playerVY = playerSprintSpeed;
+      playerVY = playerSprintSpeed - 1.5 * playerSpeedConstraint;
     }
     else {
       playerVY = 0;
@@ -229,7 +235,8 @@ function checkEating() {
   // Get distance of player to prey
   let d = dist(playerX, playerY, preyX, preyY);
   // Check if it's an overlap
-  if (d < playerRadius + preyRadius) {
+  //changed playerradius to playersize/2 as the size changes with time, and so must the hitbox
+  if (d < (playerSize/2) + preyRadius) {
     // Increase the player health
     playerHealth = playerHealth + eatHealth;
     // Constrain to the possible range
@@ -297,8 +304,6 @@ function drawPrey() {
 //
 // Draw the player as an ellipse with alpha value based on health
 function drawPlayer() {
-  let playerSize;
-
   playerSize = playerRadius * 2 + preyEaten * 5;
 
   fill(playerFill, playerHealth);
