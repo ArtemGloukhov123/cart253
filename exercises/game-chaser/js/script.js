@@ -57,6 +57,19 @@ let eatHealth = 20;
 // Number of prey eaten during the game (the "score")
 let preyEaten = 0;
 
+let bark;
+let meow;
+
+
+// preload()
+//
+// Preloads game's images and sounds to be used in the code
+function preload(){
+  bark = new Audio("assets/sounds/bark.wav");
+  meow = new Audio("assets/sounds/meow.mp3");
+}
+
+
 // setup()
 //
 // Sets up the basic elements of the game
@@ -114,6 +127,8 @@ function draw() {
 
     drawPrey();
     drawPlayer();
+
+    barkMessage();
   }
   else {
     showGameOver();
@@ -174,6 +189,9 @@ playerSpeedConstraint = sqrt(0.05 * preyEaten);
       playerVY = 0;
     }
   }
+if (keyIsDown(32)){
+  bark.play();
+}
 
 }
 
@@ -252,6 +270,9 @@ function checkEating() {
       // Move the "new" prey to a random position
       preyX = random(0, width);
       preyY = random(0, height);
+      //play meow sound
+      meow.play();
+
       // Give it full health
       preyHealth = preyMaxHealth + preyEaten * 10;
       // Track how many prey were eaten
@@ -324,4 +345,12 @@ function showGameOver() {
   gameOverText = gameOverText + "before you died."
   // Display it in the centre of the screen
   text(gameOverText, width / 2, height / 2);
+}
+
+//message telling the player how to barkMessage
+//its a useless function, meant just for atmospheric purposes
+function barkMessage() {
+  textFont("Helvetica", 20);
+  fill(50);
+  text("Press 'Space' to bark", 15, height-20);
 }
