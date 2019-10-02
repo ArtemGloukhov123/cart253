@@ -32,7 +32,7 @@ let playerSpeedConstraint;
 let playerHealth;
 let playerMaxHealth = 255;
 // Player fill color
-let playerFill = 50;
+let playerFill = 0;
 
 let playerSize;
 
@@ -50,7 +50,7 @@ let ty;
 let preyHealth;
 let preyMaxHealth = 100;
 // Prey fill color
-let preyFill = 200;
+let preyFill = 255;
 
 // Amount of health obtained per frame of "eating" (overlapping) the prey
 let eatHealth = 20;
@@ -59,7 +59,7 @@ let preyEaten = 0;
 
 let bark;
 let meow;
-
+let backgroundImage;
 
 // preload()
 //
@@ -67,6 +67,7 @@ let meow;
 function preload(){
   bark = new Audio("assets/sounds/bark.wav");
   meow = new Audio("assets/sounds/meow.mp3");
+  backgroundImage = loadImage("assets/images/carpet.png")
 }
 
 
@@ -114,7 +115,7 @@ function setupPlayer() {
 // displays the two agents.
 // When the game is over, shows the game over screen.
 function draw() {
-  background(100, 100, 200);
+  image(backgroundImage, 0, 0);
 
   if (!gameOver) {
     handleInput();
@@ -317,6 +318,8 @@ function movePrey() {
 //
 // Draw the prey as an ellipse with alpha based on health
 function drawPrey() {
+  stroke(0);
+  strokeWeight(2);
   fill(preyFill, preyHealth);
   ellipse(preyX, preyY, preyRadius * 2);
 }
@@ -335,14 +338,15 @@ function drawPlayer() {
 //
 // Display text about the game being over!
 function showGameOver() {
+  background(255, 0, 0);
   // Set up the font
   textSize(32);
   textAlign(CENTER, CENTER);
   fill(0);
   // Set up the text to display
   let gameOverText = "GAME OVER\n"; // \n means "new line"
-  gameOverText = gameOverText + "You ate " + preyEaten + " prey\n";
-  gameOverText = gameOverText + "before you died."
+  gameOverText = gameOverText + "You caught the cat " + preyEaten + " times\n";
+  gameOverText = gameOverText + "before you got tired."
   // Display it in the centre of the screen
   text(gameOverText, width / 2, height / 2);
 }
@@ -352,5 +356,17 @@ function showGameOver() {
 function barkMessage() {
   textFont("Helvetica", 20);
   fill(50);
-  text("Press 'Space' to bark", 15, height-20);
+  textAlign(LEFT);
+
+  let message = "Press 'Space' to bark\n";
+  message = message + "Press 'Shift' to run"
+
+  text(message, 10, height-35);
 }
+
+
+//wooden floor image found at
+//https://yaoota.com/en-ng/product/universal-laminate-wooden-floor-8mm-colorful-stripe-light-price-from-jumia-nigeria
+
+//carpet image found at
+//https://www.homedepot.com/p/Safavieh-Lyndhurst-Red-Black-8-ft-x-8-ft-Square-Area-Rug-LNH331B-8SQ/205406117
