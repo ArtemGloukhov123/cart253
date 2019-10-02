@@ -130,6 +130,7 @@ function draw() {
     drawPlayer();
 
     barkMessage();
+    energyBar();
   }
   else {
     showGameOver();
@@ -364,6 +365,12 @@ function barkMessage() {
   text(message, 10, height-35);
 }
 
+function energyBar() {
+  text("Energy: ", 10, 25)
+  strokeWeight(1);
+  fill(playerHealth);
+  rect(85, 5, playerHealth, 25);
+}
 
 //wooden floor image found at
 //https://yaoota.com/en-ng/product/universal-laminate-wooden-floor-8mm-colorful-stripe-light-price-from-jumia-nigeria
