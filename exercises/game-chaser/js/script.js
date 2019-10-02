@@ -206,7 +206,12 @@ function movePlayer() {
 // Check if the player is dead
 function updateHealth() {
   // Reduce player health
-  playerHealth = playerHealth - 0.5;
+  if (keyIsDown(SHIFT)){
+    playerHealth = playerHealth - 1.8;
+  }
+  else {
+    playerHealth = playerHealth - 0.5;
+  }
   // Constrain the result to a sensible range
   playerHealth = constrain(playerHealth, 0, playerMaxHealth);
   // Check if the player is dead (0 health)
@@ -214,6 +219,7 @@ function updateHealth() {
     // If so, the game is over
     gameOver = true;
   }
+  console.log("player health is " + playerHealth);
 }
 
 // checkEating()
