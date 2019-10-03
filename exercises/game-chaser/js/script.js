@@ -60,6 +60,8 @@ let preyEaten = 0;
 let bark;
 let meow;
 let backgroundImage;
+let dogFace;
+let catFace;
 
 // preload()
 //
@@ -68,6 +70,8 @@ function preload(){
   bark = new Audio("assets/sounds/bark.wav");
   meow = new Audio("assets/sounds/meow.mp3");
   backgroundImage = loadImage("assets/images/carpet.png")
+  dogFace = loadImage("assets/images/dog.png");
+  catFace = loadImage("assets/images/cat.png");
 }
 
 
@@ -115,6 +119,7 @@ function setupPlayer() {
 // displays the two agents.
 // When the game is over, shows the game over screen.
 function draw() {
+  imageMode(CORNER);
   image(backgroundImage, 0, 0);
 
   if (!gameOver) {
@@ -323,6 +328,8 @@ function drawPrey() {
   strokeWeight(2);
   fill(preyFill, preyHealth);
   ellipse(preyX, preyY, preyRadius * 2);
+  imageMode(CENTER);
+  image(catFace, preyX, preyY);
 }
 
 // drawPlayer()
@@ -333,6 +340,8 @@ function drawPlayer() {
 
   fill(playerFill, playerHealth);
   ellipse(playerX, playerY, playerSize);
+  imageMode(CENTER);
+  image(dogFace, playerX, playerY);
 }
 
 // showGameOver()
