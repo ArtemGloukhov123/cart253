@@ -146,19 +146,21 @@ titleScreen();
     barkMessage();
     energyBar();
   }
+
   else if (gameOver){
     showGameOver();
   }
 }
 
+
 // handleInput()
 //
 // Checks arrow keys and adjusts player velocity accordingly
 function handleInput() {
+
 //The more the player eats, the
 playerSpeedConstraint = sqrt(0.05 * preyEaten);
   // Check for horizontal movement
-
   //check if player is sprinting
   if (!keyIsDown(SHIFT)) {
     if (keyIsDown(LEFT_ARROW)) {
