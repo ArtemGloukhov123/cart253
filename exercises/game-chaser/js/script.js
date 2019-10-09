@@ -2,13 +2,12 @@
 
 /******************************************************
 
-Game - Chaser
-Pippin Barr
+Cat Chaser
+Artem Gloukhov
 
-A "simple" game of cat and mouse. The player is a circle and can move with keys,
-if they overlap the (randomly moving) prey they "eat it" by sucking out its life
-and adding it to their own. The player "dies" slowly over time so they have to keep
-eating to stay alive.
+You are a dog, chasing a cat. Use Shift to sprint, but keep track
+of your energy level. Run out of energy and it's Game Over!
+See how many times you can catch the cat before getting pooped out.
 
 Includes: Physics-based movement, keyboard controls, health/stamina,
 random movement, screen wrap.
@@ -57,18 +56,23 @@ let eatHealth = 20;
 // Number of prey eaten during the game (the "score")
 let preyEaten = 0;
 
-let bark;
-let meow;
+let barkSound;
+let meowSound;
+let jazzMusic;
 let backgroundImage;
 let dogFace;
 let catFace;
+
+//for checking if player has started the game
+let gameStarted = false;
 
 // preload()
 //
 // Preloads game's images and sounds to be used in the code
 function preload(){
-  bark = new Audio("assets/sounds/bark.wav");
-  meow = new Audio("assets/sounds/meow.mp3");
+  barkSound = new Audio("assets/sounds/bark.wav");
+  meowSound = new Audio("assets/sounds/meow.mp3");
+  jazzMusic = new Audio("assets/sounds/jazz.mp3");
   backgroundImage = loadImage("assets/images/carpet.png")
   dogFace = loadImage("assets/images/dog.png");
   catFace = loadImage("assets/images/cat.png");
@@ -119,10 +123,15 @@ function setupPlayer() {
 // displays the two agents.
 // When the game is over, shows the game over screen.
 function draw() {
-  imageMode(CORNER);
-  image(backgroundImage, 0, 0);
 
-  if (!gameOver) {
+titleScreen();
+
+  if (!gameOver & gameStarted) {
+    jazzMusic.play();
+    //background image of carpeted floor
+    imageMode(CORNER);
+    image(backgroundImage, 0, 0);
+
     handleInput();
 
     movePlayer();
@@ -137,7 +146,7 @@ function draw() {
     barkMessage();
     energyBar();
   }
-  else {
+  else if (gameOver){
     showGameOver();
   }
 }
@@ -197,7 +206,7 @@ playerSpeedConstraint = sqrt(0.05 * preyEaten);
     }
   }
 if (keyIsDown(32)){
-  bark.play();
+  barkSound.play();
 }
 
 }
@@ -250,7 +259,6 @@ function updateHealth() {
     // If so, the game is over
     gameOver = true;
   }
-  console.log("prey health is " + preyHealth);
 }
 
 // checkEating()
@@ -278,7 +286,7 @@ function checkEating() {
       preyX = random(0, width);
       preyY = random(0, height);
       //play meow sound
-      meow.play();
+      meowSound.play();
 
       // Give it full health
       preyHealth = preyMaxHealth + preyEaten * 10;
@@ -325,7 +333,7 @@ function movePrey() {
 // Draw the prey as an ellipse with alpha based on health
 function drawPrey() {
   stroke(0);
-  strokeWeight(2);
+  strokeWeight(1);
   fill(preyFill, preyHealth);
   ellipse(preyX, preyY, preyRadius * 2);
   imageMode(CENTER);
@@ -344,13 +352,15 @@ function drawPlayer() {
   image(dogFace, playerX, playerY);
 }
 
+
 // showGameOver()
 //
 // Display text about the game being over!
 function showGameOver() {
-  background(255, 0, 0);
+
+  background(252, 106, 96);
   // Set up the font
-  textSize(32);
+  textSize(35);
   textAlign(CENTER, CENTER);
   fill(0);
   // Set up the text to display
@@ -359,6 +369,17 @@ function showGameOver() {
   gameOverText = gameOverText + "before you got tired."
   // Display it in the centre of the screen
   text(gameOverText, width / 2, height / 2);
+  textSize(20);
+  text("Click to Restart", width/2, 0.7*height);
+
+  if(mouseIsPressed)
+  {
+    //reset game
+    gameOver = false;
+    setupPrey();
+    setupPlayer();
+    preyEaten = 0;
+  }
 }
 
 //message telling the player how to barkMessage
@@ -377,12 +398,44 @@ function barkMessage() {
 function energyBar() {
   text("Energy: ", 10, 25)
   strokeWeight(1);
-  fill(playerHealth);
-  rect(85, 5, playerHealth, 25);
+  fill(0);
+  rect(85, 6, playerMaxHealth, 25);
+
+  //energy bar starts green and turns red as it depletes
+  fill(20000/playerHealth, playerHealth, 0);
+  rect(85, 6, playerHealth, 25);
 }
 
+function titleScreen() {
+background(185, 255, 135);
+textAlign(CENTER);
+//title
+fill(0);
+textSize(65);
+textStyle(BOLD);
+text("CAT CHASER", width/2, height/2);
+//cat ears
+triangle(43,220, 50,190, 60,205);
+triangle(63,210, 75,190, 80,210);
+//start instruction
+textStyle(NORMAL);
+textSize(20);
+text("Click To Play", width/2, 0.6*height);
+
+imageMode(CENTER);
+image(dogFace, 370, 100, 130, 130);
+image(catFace, 110, 400, 100, 100);
+
+  if(mouseIsPressed)
+  {
+    gameStarted = true;
+  }
+}
 //wooden floor image found at
 //https://yaoota.com/en-ng/product/universal-laminate-wooden-floor-8mm-colorful-stripe-light-price-from-jumia-nigeria
 
 //carpet image found at
 //https://www.homedepot.com/p/Safavieh-Lyndhurst-Red-Black-8-ft-x-8-ft-Square-Area-Rug-LNH331B-8SQ/205406117
+
+//music taken from
+//https://www.youtube.com/watch?v=SQLJKuIQ6-0
