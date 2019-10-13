@@ -172,6 +172,8 @@ function handleInput(paddle) {
 function updatePaddle(paddle) {
   // Update the paddle position based on its velocity
   paddle.y += paddle.vy;
+  //constrain the paddles' movements to inside the playing area
+  paddle.y = constrain(paddle.y, 0 + paddle.h/2, height - paddle.h/2);
 }
 
 // updateBall()
@@ -191,14 +193,14 @@ function ballIsOutOfBounds() {
   // Check for ball going off the sides
   if (ball.x < 0) {
     playerScore ++; //if ball goes off left side, player wins a point
-    leftPaddle.h += 10;
-    rightPaddle.h = paddleDefaultSize;
+    leftPaddle.h += 10; //make enemy larger to give them slight advantage
+    rightPaddle.h = paddleDefaultSize;  //reset other to default size
     return true;
   }
   if (ball.x > width) {
     enemyScore ++;  //if ball goes off right side, enemy wins a point
-    rightPaddle.h += 10;
-    leftPaddle.h = paddleDefaultSize;
+    rightPaddle.h += 10;  //make player larger to give them slight advantage
+    leftPaddle.h = paddleDefaultSize; //reset other to default size
     return true;
   }
   else {
