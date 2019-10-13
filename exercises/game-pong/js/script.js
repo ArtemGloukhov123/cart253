@@ -20,6 +20,7 @@ let fgColor = 255;
 let playerScore = 0;
 let enemyScore = 0;
 
+let paddleDefaultSize = 70;
 // BALL
 
 // A ball object with the properties of
@@ -41,7 +42,7 @@ let leftPaddle = {
   x: 0,
   y: 0,
   w: 20,
-  h: 70,
+  h: paddleDefaultSize,
   vy: 0,
   speed: 5,
   upKey: 87,
@@ -56,7 +57,7 @@ let rightPaddle = {
   x: 0,
   y: 0,
   w: 20,
-  h: 70,
+  h: paddleDefaultSize,
   vy: 0,
   speed: 5,
   upKey: 38,
@@ -190,10 +191,14 @@ function ballIsOutOfBounds() {
   // Check for ball going off the sides
   if (ball.x < 0) {
     playerScore ++; //if ball goes off left side, player wins a point
+    leftPaddle.h += 10;
+    rightPaddle.h = paddleDefaultSize;
     return true;
   }
   if (ball.x > width) {
     enemyScore ++;  //if ball goes off right side, enemy wins a point
+    rightPaddle.h += 10;
+    leftPaddle.h = paddleDefaultSize;
     return true;
   }
   else {
@@ -283,7 +288,7 @@ function displayStartMessage() {
   push();
   textAlign(CENTER, CENTER);
   textSize(32);
-  text("CLICK TO START", width / 2, height / 2);
+  text("CLICK TO START", width / 2, height / 3);
   pop();
 }
 
