@@ -16,6 +16,10 @@ let playing = false;
 let bgColor = 0;
 let fgColor = 255;
 
+//player's and computer player's scores
+let playerScore = 0;
+let enemyScore = 0;
+
 // BALL
 
 // A ball object with the properties of
@@ -117,7 +121,7 @@ function draw() {
     checkBallWallCollision();
     checkBallPaddleCollision(leftPaddle);
     checkBallPaddleCollision(rightPaddle);
-
+    console.log("Player Score is "+ playerScore + " Enemy Score is " + enemyScore);
     // Check if the ball went out of bounds and respond if so
     // (Note how we can use a function that returns a truth value
     // inside a conditional!)
@@ -184,7 +188,12 @@ function updateBall() {
 // Returns true if so, false otherwise
 function ballIsOutOfBounds() {
   // Check for ball going off the sides
-  if (ball.x < 0 || ball.x > width) {
+  if (ball.x < 0) {
+    playerScore ++; //if ball goes off left side, player wins a point
+    return true;
+  }
+  if (ball.x > width) {
+    enemyScore ++;  //if ball goes off right side, enemy wins a point
     return true;
   }
   else {
