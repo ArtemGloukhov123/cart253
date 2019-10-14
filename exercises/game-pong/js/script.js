@@ -20,9 +20,15 @@ let fgColor = 255;
 let playerScore = 0;
 let enemyScore = 0;
 
+let playerHealth = 5;
+let enemyHealth = 5;
+let playerHeart;
+let enemyHeart;
+
 let paddleDefaultSize = 70;
 // BALL
 
+let ballDefaultSpeed = 5;
 // A ball object with the properties of
 // position, size, velocity, and speed
 let ball = {
@@ -31,22 +37,25 @@ let ball = {
   size: 20,
   vx: 0,
   vy: 0,
-  speed: 5
+  speed: ballDefaultSpeed,
 }
 
 // PADDLES
 
 // Basic definition of a left paddle object with its key properties of
 // position, size, velocity, and speed
+let paddleDefaultSpeed = 5;
+let enemyDefaultSpeed = 4.3;
+
 let leftPaddle = {
   x: 0,
   y: 0,
   w: 20,
   h: paddleDefaultSize,
   vy: 0,
-  speed: 5,
-  upKey: 87,
-  downKey: 83
+  speed: enemyDefaultSpeed,
+  //upKey: 87,
+  //downKey: 83
 }
 
 // RIGHT PADDLE
@@ -59,19 +68,26 @@ let rightPaddle = {
   w: 20,
   h: paddleDefaultSize,
   vy: 0,
-  speed: 5,
+  speed: paddleDefaultSpeed,
   upKey: 38,
   downKey: 40
 }
 
 // A variable to hold the beep sound we will play on bouncing
 let beepSFX;
+let beepPaddle; //different sound for when ball hits paddle
+let beepOut; //sound for when ball is out of bounds
 
 // preload()
 //
 // Loads the beep audio for the sound of bouncing
 function preload() {
   beepSFX = new Audio("assets/sounds/beep.wav");
+  beepPaddle = new Audio("assets/sounds/beep2.wav");
+  beepOut = new Audio("assets/sounds/beep3.wav");
+
+  playerHeart = loadImage("assets/images/heart.png");
+  enemyHeart = loadImage("assets/images/enemyheart.png");
 }
 
 // setup()
@@ -81,7 +97,7 @@ function preload() {
 // and velocities.
 function setup() {
   // Create canvas and set drawing modes
-  createCanvas(640, 480);
+  createCanvas(680, 580);
   rectMode(CENTER);
   noStroke();
   fill(fgColor);
@@ -113,11 +129,14 @@ function draw() {
 
   if (playing) {
     // If the game is in play, we handle input and move the elements around
-    handleInput(leftPaddle);
     handleInput(rightPaddle);
+    handleAI();
     updatePaddle(leftPaddle);
     updatePaddle(rightPaddle);
     updateBall();
+
+    displayEnemyHealth();
+    displayPlayerHealth();
 
     checkBallWallCollision();
     checkBallPaddleCollision(leftPaddle);
@@ -193,14 +212,26 @@ function ballIsOutOfBounds() {
   // Check for ball going off the sides
   if (ball.x < 0) {
     playerScore ++; //if ball goes off left side, player wins a point
-    leftPaddle.h += 10; //make enemy larger to give them slight advantage
+    leftPaddle.h += 20; //make enemy larger to give them slight advantage
     rightPaddle.h = paddleDefaultSize;  //reset other to default size
+    leftPaddle.speed += 1; //increase enemy speed
+    enemyHealth --;
+    ball.speed = ballDefaultSpeed;  //reset ball speed to default
+
+    beepOut.currentTime = 0;
+    beepOut.play();
     return true;
   }
   if (ball.x > width) {
     enemyScore ++;  //if ball goes off right side, enemy wins a point
-    rightPaddle.h += 10;  //make player larger to give them slight advantage
+    rightPaddle.h += 20;  //make player larger to give them slight advantage
     leftPaddle.h = paddleDefaultSize; //reset other to default size
+    leftPaddle.speed -= 0.3;
+    playerHealth --;
+    ball.speed = ballDefaultSpeed; //reset ball speed to default
+
+    beepOut.currentTime = 0;
+    beepOut.play();
     return true;
   }
   else {
@@ -250,8 +281,10 @@ function checkBallPaddleCollision(paddle) {
       // Reverse its vx so it starts travelling in the opposite direction
       ball.vx = -ball.vx;
       // Play our bouncing sound effect by rewinding and then playing
-      beepSFX.currentTime = 0;
-      beepSFX.play();
+      beepPaddle.currentTime = 0;
+      beepPaddle.play();
+      ball.vy *= 1.1;
+      ball.vx *= 1.1;
     }
   }
 }
@@ -277,9 +310,9 @@ function displayBall() {
 // Sets the starting position and velocity of the ball
 function resetBall() {
   // Initialise the ball's position and velocity
-  ball.x = width / 2;
+  ball.x = rightPaddle.x - 30;
   ball.y = height / 2;
-  ball.vx = ball.speed;
+  ball.vx = -ball.speed;
   ball.vy = ball.speed;
 }
 
@@ -300,4 +333,38 @@ function displayStartMessage() {
 // Which will help us be allowed to play audio in the browser
 function mousePressed() {
   playing = true;
+}
+
+//handle computer player movement
+function handleAI() {
+if(ball.vx < 0){
+  if(ball.y > leftPaddle.y) {
+    leftPaddle.vy = leftPaddle.speed
+  }
+    if(ball.y < leftPaddle.y) {
+      leftPaddle.vy = -leftPaddle.speed
+    }
+}
+else {
+  leftPaddle.vy = 0;
+}
+}
+
+//display the enemy's health with hearts
+function displayEnemyHealth() {
+let heartX = 5;
+  for(let i = 0; i < enemyHealth; i ++) {
+    image(enemyHeart, heartX, 10);
+    heartX += enemyHeart.width + 5;
+  }
+}
+
+
+//display the player's health with hearts
+function displayPlayerHealth() {
+let heartX = width - playerHeart.width - 5;
+  for(let i = 0; i < playerHealth; i ++) {
+    image(playerHeart, heartX, 10);
+    heartX -= playerHeart.width + 5;
+  }
 }
