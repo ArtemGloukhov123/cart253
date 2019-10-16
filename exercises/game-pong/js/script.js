@@ -1,31 +1,32 @@
 "use strict";
 
 // Pong
-// by Pippin Barr
+// by Artem Gloukhov
 //
-// A "simple" implementation of Pong with no scoring system
-// just the ability to play the game with the keyboard.
-//
-// Up and down keys control the right hand paddle, W and S keys control
-// the left hand paddle
+// Play Pong against the computer
 
 // Whether the game has started
 let playing = false;
+let gameOver = false; //whether the player has lost
+
+//determines the level of the game, starts at level 1
+let level = 1;
+//tells the program that the level number is being displayed
+let displayingLevelNumber = true;
 
 // Game colors (using hexadecimal)
 let bgColor = 0;
 let fgColor = 255;
 
-//player's and computer player's scores
-let playerScore = 0;
-let enemyScore = 0;
-
-let playerHealth = 5;
-let enemyHealth = 5;
+let playerMaxHealth = 5;
+let enemyMaxHealth = 2;
+let playerHealth = playerMaxHealth;
+let enemyHealth = enemyMaxHealth;
 let playerHeart;
 let enemyHeart;
 
-let paddleDefaultSize = 70;
+let playerDefaultSize = 70;
+let enemyDefaultSize = 70;
 // BALL
 
 let ballDefaultSpeed = 5;
@@ -51,7 +52,7 @@ let leftPaddle = {
   x: 0,
   y: 0,
   w: 20,
-  h: paddleDefaultSize,
+  h: enemyDefaultSize,
   vy: 0,
   speed: enemyDefaultSpeed,
   //upKey: 87,
@@ -66,7 +67,7 @@ let rightPaddle = {
   x: 0,
   y: 0,
   w: 20,
-  h: paddleDefaultSize,
+  h: playerDefaultSize,
   vy: 0,
   speed: paddleDefaultSpeed,
   upKey: 38,
@@ -77,6 +78,17 @@ let rightPaddle = {
 let beepSFX;
 let beepPaddle; //different sound for when ball hits paddle
 let beepOut; //sound for when ball is out of bounds
+
+//x positions for starting the ball
+let ballStartEnemySide = {
+  x: 50,
+  y: leftPaddle.y
+}
+
+let ballStartPlayerSide = {
+  x: 630,
+  y: rightPaddle.y
+}
 
 // preload()
 //
@@ -103,7 +115,7 @@ function setup() {
   fill(fgColor);
 
   setupPaddles();
-  resetBall();
+  resetBall(ballStartPlayerSide.x, height / 2);
 }
 
 // setupPaddles()
@@ -126,8 +138,15 @@ function setupPaddles() {
 function draw() {
   // Fill the background
   background(bgColor);
+  displayStartMessage();
 
-  if (playing) {
+  if (playing & !gameOver & displayingLevelNumber) {
+    displayLevel();
+  }
+
+  if (playing & !gameOver & !displayingLevelNumber) {
+    background(bgColor);
+
     // If the game is in play, we handle input and move the elements around
     handleInput(rightPaddle);
     handleAI();
@@ -141,26 +160,25 @@ function draw() {
     checkBallWallCollision();
     checkBallPaddleCollision(leftPaddle);
     checkBallPaddleCollision(rightPaddle);
-    console.log("Player Score is "+ playerScore + " Enemy Score is " + enemyScore);
-    // Check if the ball went out of bounds and respond if so
-    // (Note how we can use a function that returns a truth value
-    // inside a conditional!)
-    if (ballIsOutOfBounds()) {
-      // If it went off either side, reset it
-      resetBall();
-      // This is where we would likely count points, depending on which side
-      // the ball went off...
-    }
-  }
-  else {
-    // Otherwise we display the message to start the game
-    displayStartMessage();
+
+    checkIfGameOver();
+    ballIsOutOfBounds();
+
+    //display the paddles
+    displayPaddle(leftPaddle);
+    displayPaddle(rightPaddle);
+    displayBall();
+
+    //check if conditions are met to advance to next level
+    levelUp();
+
+    console.log("level is " + level);
+  } else if (gameOver) {
+    //if player loses all health, game is over
+    gameOverScreen();
   }
 
-  // We always display the paddles and ball so it looks like Pong!
-  displayPaddle(leftPaddle);
-  displayPaddle(rightPaddle);
-  displayBall();
+
 }
 
 // handleInput()
@@ -178,8 +196,7 @@ function handleInput(paddle) {
   else if (keyIsDown(paddle.downKey)) {
     // Move down
     paddle.vy = paddle.speed;
-  }
-  else {
+  } else {
     // Otherwise stop moving
     paddle.vy = 0;
   }
@@ -192,7 +209,7 @@ function updatePaddle(paddle) {
   // Update the paddle position based on its velocity
   paddle.y += paddle.vy;
   //constrain the paddles' movements to inside the playing area
-  paddle.y = constrain(paddle.y, 0 + paddle.h/2, height - paddle.h/2);
+  paddle.y = constrain(paddle.y, 0 + paddle.h / 2, height - paddle.h / 2);
 }
 
 // updateBall()
@@ -211,31 +228,29 @@ function updateBall() {
 function ballIsOutOfBounds() {
   // Check for ball going off the sides
   if (ball.x < 0) {
-    playerScore ++; //if ball goes off left side, player wins a point
-    leftPaddle.h += 20; //make enemy larger to give them slight advantage
-    rightPaddle.h = paddleDefaultSize;  //reset other to default size
-    leftPaddle.speed += 1; //increase enemy speed
-    enemyHealth --;
-    ball.speed = ballDefaultSpeed;  //reset ball speed to default
-
-    beepOut.currentTime = 0;
-    beepOut.play();
-    return true;
-  }
-  if (ball.x > width) {
-    enemyScore ++;  //if ball goes off right side, enemy wins a point
-    rightPaddle.h += 20;  //make player larger to give them slight advantage
-    leftPaddle.h = paddleDefaultSize; //reset other to default size
-    leftPaddle.speed -= 0.3;
-    playerHealth --;
+    leftPaddle.h += 25; //make enemy larger to give them slight advantage
+    rightPaddle.h = enemyDefaultSize; //reset other to default size
+    leftPaddle.speed += 1.4; //increase enemy speed
+    enemyHealth--;
     ball.speed = ballDefaultSpeed; //reset ball speed to default
 
     beepOut.currentTime = 0;
     beepOut.play();
-    return true;
+    ballStartEnemySide.y = leftPaddle.y;
+    resetBall(ballStartEnemySide.x, ballStartEnemySide.y);
   }
-  else {
-    return false;
+
+  if (ball.x > width) {
+    rightPaddle.h += 25; //make player larger to give them slight advantage
+    leftPaddle.h = enemyDefaultSize; //reset other to default size
+    leftPaddle.speed -= 0.3; //decrease enemy speed
+    playerHealth--;
+    ball.speed = ballDefaultSpeed; //reset ball speed to default
+
+    beepOut.currentTime = 0;
+    beepOut.play();
+    ballStartPlayerSide.y = rightPaddle.y;
+    resetBall(ballStartPlayerSide.x, ballStartPlayerSide.y);
   }
 }
 
@@ -279,7 +294,18 @@ function checkBallPaddleCollision(paddle) {
     if (ballLeft < paddleRight && ballRight > paddleLeft) {
       // Then the ball is touching the paddle
       // Reverse its vx so it starts travelling in the opposite direction
+      let d = dist(ball.x, ball.y, paddle.x, paddle.y);
+
       ball.vx = -ball.vx;
+
+      //check if ball hit top half of paddle
+      if(ball.y < paddle.y) {
+        ball.vy = -(d/35)* ballDefaultSpeed;
+      }
+
+      if(ball.y > paddle.y) {
+        ball.vy = (d/35)* ballDefaultSpeed;
+      }
       // Play our bouncing sound effect by rewinding and then playing
       beepPaddle.currentTime = 0;
       beepPaddle.play();
@@ -308,11 +334,17 @@ function displayBall() {
 // resetBall()
 //
 // Sets the starting position and velocity of the ball
-function resetBall() {
+function resetBall(x, y) {
   // Initialise the ball's position and velocity
-  ball.x = rightPaddle.x - 30;
-  ball.y = height / 2;
-  ball.vx = -ball.speed;
+  ball.x = x;
+  ball.y = y;
+
+  if (x < width / 2) {
+    ball.vx = ball.speed; //ball goes right from enemy's side
+  }
+  if (x > width / 2) {
+    ball.vx = -ball.speed; //ball goes left from player's side
+  }
   ball.vy = ball.speed;
 }
 
@@ -320,41 +352,44 @@ function resetBall() {
 //
 // Shows a message about how to start the game
 function displayStartMessage() {
+  displayPaddle(leftPaddle);
+  displayPaddle(rightPaddle);
+  displayBall();
+
   push();
   textAlign(CENTER, CENTER);
   textSize(32);
-  text("CLICK TO START", width / 2, height / 3);
+  text("CLICK TO START", width / 2, height / 2);
+
+  if (mouseIsPressed) {
+    playing = true;
+  }
   pop();
 }
 
-// mousePressed()
-//
-// Here to require a click to start playing the game
-// Which will help us be allowed to play audio in the browser
-function mousePressed() {
-  playing = true;
-}
 
 //handle computer player movement
 function handleAI() {
-if(ball.vx < 0){
-  if(ball.y > leftPaddle.y) {
-    leftPaddle.vy = leftPaddle.speed
-  }
-    if(ball.y < leftPaddle.y) {
+enemyParameters();
+
+  //check if ball is coming towards enemy paddle
+  if (ball.vx < 0) {
+    if (ball.y > leftPaddle.y) {
+      leftPaddle.vy = leftPaddle.speed
+    }
+    if (ball.y < leftPaddle.y) {
       leftPaddle.vy = -leftPaddle.speed
     }
-}
-else {
-  leftPaddle.vy = 0;
-}
+  } else {
+    leftPaddle.vy = 0;
+  }
 }
 
 //display the enemy's health with hearts
 function displayEnemyHealth() {
-let heartX = 5;
-  for(let i = 0; i < enemyHealth; i ++) {
-    image(enemyHeart, heartX, 10);
+  let heartX = 5;
+  for (let i = 0; i < enemyHealth; i++) {
+    image(enemyHeart, heartX, 7);
     heartX += enemyHeart.width + 5;
   }
 }
@@ -362,9 +397,102 @@ let heartX = 5;
 
 //display the player's health with hearts
 function displayPlayerHealth() {
-let heartX = width - playerHeart.width - 5;
-  for(let i = 0; i < playerHealth; i ++) {
-    image(playerHeart, heartX, 10);
+  let heartX = width - playerHeart.width - 5;
+  for (let i = 0; i < playerHealth; i++) {
+    image(playerHeart, heartX, 7);
     heartX -= playerHeart.width + 5;
   }
+}
+
+
+function checkIfGameOver() {
+  if (playerHealth < 1) {
+    gameOver = true;
+  }
+}
+
+
+function gameOverScreen() {
+  background(222, 58, 58);
+
+  // Set up the font
+  textSize(35);
+  textAlign(CENTER, CENTER);
+  fill(255);
+
+  text("GAME OVER", width / 2, height / 2);
+}
+
+
+//display level number on screen
+function displayLevel() {
+  background(bgColor);
+
+  displayPaddle(leftPaddle);
+  displayPaddle(rightPaddle);
+  displayBall();
+
+  text("LEVEL " + level, width / 2, height / 2);
+
+  timer(3000);
+}
+
+
+//sets game to next level
+function levelUp() {
+  if (enemyHealth < 1) {
+    level++;
+
+    enemyMaxHealth++;
+    enemyHealth = enemyMaxHealth;
+
+    playerHealth = playerMaxHealth;
+
+    leftPaddle.h = enemyDefaultSize;
+    rightPaddle.h = playerDefaultSize;
+
+    displayingLevelNumber = true;
+    enemyMaxHealth++;
+    displayLevel();
+  }
+}
+
+
+//update enemy parameters according to level
+function enemyParameters() {
+  if (level === 1) {
+    enemyDefaultSpeed = 5;
+    leftPaddle.speed = enemyDefaultSpeed;
+    enemyDefaultSize = 70;
+    leftPaddle.h = enemyDefaultSize;
+  }
+
+  if (level === 2) {
+    enemyDefaultSpeed = 6;
+    leftPaddle.speed = enemyDefaultSpeed;
+    enemyDefaultSize = 80;
+    leftPaddle.h = enemyDefaultSize;
+  }
+
+  if (level === 3) {
+    enemyDefaultSpeed = 8;
+    leftPaddle.speed = enemyDefaultSpeed;
+    enemyDefaultSize = 95;
+    leftPaddle.h = enemyDefaultSize;
+  }
+
+  if (level === 4) {
+    enemyDefaultSpeed = 12;
+    leftPaddle.speed = enemyDefaultSpeed;
+    enemyDefaultSize = 120;
+    leftPaddle.h = enemyDefaultSize;
+  }
+}
+
+function timer(time) {
+  setTimeout(displayFalse, time);
+}
+
+function displayFalse() {
+  displayingLevelNumber = false;
 }
