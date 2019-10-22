@@ -147,6 +147,13 @@ class Predator {
     fill(this.fillColor);
     this.radius = this.health;
     ellipse(this.x, this.y, this.radius * 2);
+    //display prey eaten on each predator
+    strokeWeight(3);
+    stroke(255);
+    fill(0);
+    textAlign(CENTER);
+    textSize(20);
+    text(this.preyEaten, this.x, this.y+6);
     pop();
   }
 }
