@@ -93,5 +93,7 @@ class Prey {
     this.health = this.maxHealth;
     // Default radius
     this.radius = this.health;
+    //increase prey speed by 1 each time it is eaten, let's call this natural selection
+    this.speed ++;
   }
 }
