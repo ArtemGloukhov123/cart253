@@ -76,7 +76,7 @@ class Predator {
   // Handles wrapping
   move() {
     // Update position
-    this.x += this.vx;
+    this.x += this.vx;  //FIXED, "=" to "+=", so predator position changes
     this.y += this.vy;
     // Update health
     this.health = this.health - this.healthLossPerMove;
@@ -124,7 +124,7 @@ class Predator {
       prey.health -= this.healthGainPerEat;
       // Check if the prey died and reset it if so
       if (prey.health < 0) {
-        prey.rest();
+        prey.reset(); //FIXED "rest" to "reset"
       }
     }
   }
