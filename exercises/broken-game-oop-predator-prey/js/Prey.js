@@ -50,7 +50,7 @@ class Prey {
     this.ty += 0.01;
     // Handle wrapping
     this.handleWarping();
-
+  } //FIXED, added closing bracket
 
     // handleWrapping
     //
