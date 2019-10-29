@@ -60,7 +60,8 @@ class Predator {
     if (keyIsDown(this.upKey)) {
       this.vy = -this.speed;
     }
-    else if (keyIsClown(this.downKey)) {
+    //FIXED, "keyIsClown" to "keyIsDown"
+    else if (keyIsDown(this.downKey)) {
       this.vy = this.speed;
     }
     else {
@@ -75,8 +76,8 @@ class Predator {
   // Handles wrapping
   move() {
     // Update position
-    this.x = this.vx;
-    this.y = this.vy;
+    this.x += this.vx;
+    this.y += this.vy;
     // Update health
     this.health = this.health - this.healthLossPerMove;
     this.health = constrain(this.health, 0, this.maxHealth);
