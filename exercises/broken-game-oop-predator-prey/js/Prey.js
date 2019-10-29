@@ -71,7 +71,7 @@ class Prey {
         this.y += height;
       }
       else if (this.y > height) {
-        this.y -= hight;
+        this.y -= height; //FIXED "hight" to "height"
       }
     }
 
