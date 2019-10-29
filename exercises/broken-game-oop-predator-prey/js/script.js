@@ -37,7 +37,7 @@ function setup() {
 // Handles input, movement, eating, and displaying for the system's objects
 function draw() {
   // Clear the background to black
-  backgroun(0);
+  background(0);  //FIXED "backgroun" to "background"
 
   // Handle input for the tiger
 
