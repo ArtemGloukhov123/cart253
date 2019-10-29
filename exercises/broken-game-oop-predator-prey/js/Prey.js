@@ -25,9 +25,9 @@ class Prey {
     this.vy = 0;
     this.speed = speed; //FIXED, "sped" to "speed"
     // Time properties for noise() function
-    //FIXED, "random(0, 0)" to "random(0, 1)", as previously would only give 0
-    this.tx = random(0, 1); // To make x and y noise different
-    this.ty = random(0, 1); // we use random starting values
+    //FIXED, "random(0, 0)" to "random(0, 10)", as previously would only give 0
+    this.tx = random(0, 10); // To make x and y noise different
+    this.ty = random(0, 10); // we use random starting values
     // Health properties
     this.maxHealth = radius;
     this.health = this.maxHealth; // Must be AFTER defining this.maxHealth
