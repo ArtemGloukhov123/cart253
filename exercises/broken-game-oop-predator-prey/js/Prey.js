@@ -8,7 +8,8 @@
 // ~10 ERRORS IN HERE
 /////////////////////////
 
-glass Prey {
+//Fixed "glass" to "class"
+class Prey {
 
   // constructor
   //
