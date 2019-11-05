@@ -9,17 +9,30 @@
 let tiger;
 let hunter;
 
+let bush;
 let bushImage;
 
-let bush;
-
+let zebraImage;
 let zebra;
+
+//array for storing sprout images to make background
+let sprouts = [];
+let sproutX = [];
+let sproutY = [];
+let numberOfSprouts = 35;
 
 //preload
 //
 //preload the images
 function preload() {
+  for (let i = 0; i < numberOfSprouts; i++) {
+    sprouts.push(loadImage('assets/images/sprout1.png'))
+    sprouts.push(loadImage('assets/images/sprout2.png'))
+    sprouts.push(loadImage('assets/images/sprout3.png'))
+  }
+
   bushImage = loadImage('assets/images/bush.png');
+  zebraImage = loadImage('assets/images/zebra.png');
 }
 
 
@@ -31,11 +44,13 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   tiger = new Predator(100, 100, 5, color(200, 200, 0), 40);
 
-  hunter = new Hunter(random(width), random(height), 5, color(200, 200, 200), 30);
+  hunter = new Hunter(random(width), random(height), 5, color(200, 200, 200), 20);
 
   bush = new Bush(bushImage, random(width), random(height));
 
-  zebra = new Prey(200, 200, 4, 100, 30);
+  zebra = new Prey(zebraImage, 200, 200, 3, 100, 25);
+
+  setSproutCoordinates();
 }
 
 // draw()
@@ -43,7 +58,8 @@ function setup() {
 // Handles input, movement, eating, and displaying for the system's objects
 function draw() {
   // Clear the background to black
-  background(0);
+  background(128, 235, 52);
+  displaySprouts();
 
   // Handle input for the tiger
   tiger.handleInput();
@@ -72,4 +88,20 @@ function draw() {
   zebra.display(tiger);
 
   zebra.handleRunning(tiger);
+}
+
+//sets up all x and y values for the sprouts so that they may
+//be redrawn at the same locations
+function setSproutCoordinates() {
+  for (let i = 0; i < numberOfSprouts; i++) {
+    sproutX.push(random(width));
+    sproutY.push(random(height));
+  }
+}
+
+//displays sprouts at previously designated x and y values
+function displaySprouts() {
+  for (let i = 0; i < numberOfSprouts; i++) {
+    image(sprouts[i], sproutX[i], sproutY[i]);
+  }
 }
