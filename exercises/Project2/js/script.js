@@ -9,6 +9,18 @@
 let tiger;
 let hunter;
 
+let bushImage;
+
+let bush;
+
+
+//preload
+//
+//preload the images
+function preload() {
+  bushImage = loadImage('assets/images/bush.png');
+}
+
 
 // setup()
 //
@@ -19,6 +31,8 @@ function setup() {
   tiger = new Predator(100, 100, 5, color(200, 200, 0), 40);
 
   hunter = new Hunter(200, 200, 5, color(200, 200, 200), 40);
+
+  bush = new Bush(bushImage, random(width), random(height));
 }
 
 // draw()
@@ -41,4 +55,8 @@ function draw() {
   hunter.display(tiger);
 
   hunter.handleChasing(tiger);
+
+  tiger.handleHiding(bush);
+
+  bush.display();
 }

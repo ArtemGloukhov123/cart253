@@ -133,4 +133,18 @@ class Predator {
     ellipse(this.x, this.y, this.radius * 2);
     pop();
   }
+
+
+  handleHiding(bush) {
+    let d = dist(bush.x, bush.y, this.x, this.y);
+
+    if (d < 50) {
+      this.hidden = true;
+    }
+
+    else {
+      this.hidden = false;
+    }
+  console.log("hidden " + this.hidden);
+  }
 }

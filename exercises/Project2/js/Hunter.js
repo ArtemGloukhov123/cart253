@@ -37,19 +37,8 @@ class Hunter {
   // Sets velocity based on the noise() function and the Prey's speed
   // Moves based on the resulting velocity and handles wrapping
   move(predator) {
-    if (!this.chasing) {
-      // Set velocity via noise()
-      this.vx = map(noise(this.tx), 0, 1, -this.speed, this.speed);
-      this.vy = map(noise(this.ty), 0, 1, -this.speed, this.speed);
-      // Update position
-      this.x += this.vx;
-      this.y += this.vy;
-      // Update time properties
-      this.tx += 0.01;
-      this.ty += 0.01;
-    }
 
-    else {
+    if (this.chasing & !predator.hidden) {
       if(predator.x < this.x) {
         this.x -= 3;
       }
@@ -62,7 +51,18 @@ class Hunter {
         else if(predator.y > this.y) {
           this.y += 3;
         }
-    }
+      }
+      else {
+        // Set velocity via noise()
+        this.vx = map(noise(this.tx), 0, 1, -this.speed, this.speed);
+        this.vy = map(noise(this.ty), 0, 1, -this.speed, this.speed);
+        // Update position
+        this.x += this.vx;
+        this.y += this.vy;
+        // Update time properties
+        this.tx += 0.01;
+        this.ty += 0.01;
+      }
 
     // Handle wrapping
     this.handleWrapping();
@@ -99,7 +99,7 @@ class Hunter {
 
     let d = dist(predator.x, predator.y, this.x, this.y)
 
-    if (d < this.visionRadius) {
+    if (this.chasing) {
       fill(this.visionAggro);
     } else {
       fill(this.visionCalm);
@@ -118,7 +118,7 @@ class Hunter {
 
     let d = dist(predator.x, predator.y, this.x, this.y)
 
-    if (d < this.visionRadius) {
+    if (d < this.visionRadius & !predator.hidden) {
       this.chasing = true;
     }
 
