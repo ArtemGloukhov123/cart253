@@ -30,7 +30,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   tiger = new Predator(100, 100, 5, color(200, 200, 0), 40);
 
-  hunter = new Hunter(200, 200, 5, color(200, 200, 200), 40);
+  hunter = new Hunter(random(width), random(height), 5, color(200, 200, 200), 30);
 
   bush = new Bush(bushImage, random(width), random(height));
 }
@@ -59,4 +59,6 @@ function draw() {
   tiger.handleHiding(bush);
 
   bush.display();
+
+  hunter.handleEating(tiger);
 }

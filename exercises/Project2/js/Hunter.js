@@ -40,16 +40,16 @@ class Hunter {
 
     if (this.chasing & !predator.hidden) {
       if(predator.x < this.x) {
-        this.x -= 3;
+        this.x -= 3.5;
       }
       else if(predator.x > this.x) {
-        this.x += 3;
+        this.x += 3.5;
       }
         if(predator.y < this.y) {
-          this.y -= 3;
+          this.y -= 3.5;
         }
         else if(predator.y > this.y) {
-          this.y += 3;
+          this.y += 3.5;
         }
       }
       else {
@@ -118,7 +118,7 @@ class Hunter {
 
     let d = dist(predator.x, predator.y, this.x, this.y)
 
-    if (d < this.visionRadius & !predator.hidden) {
+    if (d < this.visionRadius + predator.radius & !predator.hidden) {
       this.chasing = true;
     }
 
@@ -127,6 +127,16 @@ class Hunter {
     }
   }
 
+  handleEating(predator) {
+    // Calculate distance from the hunter to the predator
+    let d = dist(this.x, this.y, predator.x, predator.y);
 
+    // Check if the distance is less than their two radii (an overlap)
+    //won't harm tiger if tiger is hidden and hunter accidentally roams over bush
+    if (!predator.hidden & d < this.radius + predator.radius) {
+      predator.health -= 0.3;
+      predator.health = constrain(predator.health, 10, predator.maxHealth);
+    }
+  }
 
 }
