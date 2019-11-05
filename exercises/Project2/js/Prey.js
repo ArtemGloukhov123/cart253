@@ -27,22 +27,48 @@ class Prey {
     // Display properties
     this.fillColor = fillColor;
     this.radius = this.health;
+
+    this.running = false; //running away from predator
+
+    this.visionRadius = 100;
+
+    this.visionCalm = color(0, 200, 0, 50);
+    this.visionAggro = color(200, 0, 0, 50);
   }
 
   // move
   //
   // Sets velocity based on the noise() function and the Prey's speed
   // Moves based on the resulting velocity and handles wrapping
-  move() {
-    // Set velocity via noise()
-    this.vx = map(noise(this.tx), 0, 1, -this.speed, this.speed);
-    this.vy = map(noise(this.ty), 0, 1, -this.speed, this.speed);
-    // Update position
-    this.x += this.vx;
-    this.y += this.vy;
-    // Update time properties
-    this.tx += 0.01;
-    this.ty += 0.01;
+  move(predator) {
+
+    if (this.running & !predator.hidden) {
+      if(predator.x < this.x) {
+        this.x += this.speed;
+      }
+      else if(predator.x > this.x) {
+        this.x -= this.speed;
+      }
+        if(predator.y < this.y) {
+          this.y += this.speed;
+        }
+        else if(predator.y > this.y) {
+          this.y -= this.speed;
+        }
+      }
+
+      else {
+        // Set velocity via noise()
+        this.vx = map(noise(this.tx), 0, 1, -this.speed, this.speed);
+        this.vy = map(noise(this.ty), 0, 1, -this.speed, this.speed);
+        // Update position
+        this.x += this.vx;
+        this.y += this.vy;
+        // Update time properties
+        this.tx += 0.01;
+        this.ty += 0.01;
+      }
+
     // Handle wrapping
     this.handleWrapping();
   }
@@ -72,9 +98,23 @@ class Prey {
   //
   // Draw the prey as an ellipse on the canvas
   // with a radius the same size as its current health.
-  display() {
+  display(predator) {
     push();
+
+    //display vision circle
     noStroke();
+
+    let d = dist(predator.x, predator.y, this.x, this.y)
+
+    if (this.running) {
+      fill(this.visionAggro);
+    } else {
+      fill(this.visionCalm);
+    }
+
+    //display prey
+    ellipse(this.x, this.y, this.visionRadius * 2);
+
     fill(this.fillColor);
     this.radius = this.health;
     ellipse(this.x, this.y, this.radius * 2);
@@ -94,4 +134,16 @@ class Prey {
     // Default radius
     this.radius = this.health;
   }
+
+handleRunning(predator) {
+  let d = dist(predator.x, predator.y, this.x, this.y)
+
+  if (d < this.visionRadius + predator.radius & !predator.hidden) {
+    this.running = true;
+  }
+
+  else {
+    this.running = false;
+  }
+}
 }

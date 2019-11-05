@@ -13,6 +13,7 @@ let bushImage;
 
 let bush;
 
+let zebra;
 
 //preload
 //
@@ -33,6 +34,8 @@ function setup() {
   hunter = new Hunter(random(width), random(height), 5, color(200, 200, 200), 30);
 
   bush = new Bush(bushImage, random(width), random(height));
+
+  zebra = new Prey(200, 200, 4, 100, 30);
 }
 
 // draw()
@@ -52,13 +55,21 @@ function draw() {
 
   // Display all the "animals"
   tiger.display();
-  hunter.display(tiger);
+  //hunter.display(tiger);
 
-  hunter.handleChasing(tiger);
+  //hunter.handleChasing(tiger);
 
   tiger.handleHiding(bush);
 
+  tiger.handleEating(zebra);
+
   bush.display();
 
-  hunter.handleEating(tiger);
+  //hunter.handleEating(tiger);
+
+  zebra.move(tiger);
+
+  zebra.display(tiger);
+
+  zebra.handleRunning(tiger);
 }
