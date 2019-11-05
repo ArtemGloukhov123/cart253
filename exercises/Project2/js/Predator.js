@@ -31,6 +31,8 @@ class Predator {
     this.downKey = DOWN_ARROW;
     this.leftKey = LEFT_ARROW;
     this.rightKey = RIGHT_ARROW;
+
+    this.hidden = false; //whether the player is hidden behind a bush or not
   }
 
   // handleInput
@@ -71,7 +73,7 @@ class Predator {
     this.y += this.vy;
     // Update health
     this.health = this.health - this.healthLossPerMove;
-    this.health = constrain(this.health, 0, this.maxHealth);
+    this.health = constrain(this.health, 10, this.maxHealth);
     // Handle wrapping
     this.handleWrapping();
   }
