@@ -7,6 +7,8 @@
 
 // Our predator
 let tiger;
+let tigerImage;
+
 let hunter;
 
 let bush;
@@ -14,6 +16,8 @@ let bushImage;
 
 let zebraImage;
 let zebra;
+
+let level;
 
 //array for storing sprout images to make background
 let sprouts = [];
@@ -31,6 +35,7 @@ function preload() {
     sprouts.push(loadImage('assets/images/sprout3.png'))
   }
 
+  tigerImage = loadImage('assets/images/tiger.png');
   bushImage = loadImage('assets/images/bush.png');
   zebraImage = loadImage('assets/images/zebra.png');
 }
@@ -42,7 +47,7 @@ function preload() {
 // Creates objects for the predator and three prey
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  tiger = new Predator(100, 100, 5, color(200, 200, 0), 40);
+  tiger = new Predator(tigerImage, 100, 100, 5, color(200, 200, 0), 40);
 
   hunter = new Hunter(random(width), random(height), 5, color(200, 200, 200), 20);
 
@@ -50,6 +55,9 @@ function setup() {
 
   zebra = new Prey(zebraImage, 200, 200, 3, 100, 25);
 
+  level = new Level(1);
+
+  level.setBushCoordinates(bush);
   setSproutCoordinates();
 }
 
@@ -71,17 +79,17 @@ function draw() {
 
   // Display all the "animals"
   tiger.display();
-  //hunter.display(tiger);
+  hunter.display(tiger);
 
-  //hunter.handleChasing(tiger);
+  hunter.handleChasing(tiger);
 
   tiger.handleHiding(bush);
 
   tiger.handleEating(zebra);
 
-  bush.display();
+  level.displayBushes(bush);
 
-  //hunter.handleEating(tiger);
+  hunter.handleEating(tiger);
 
   zebra.move(tiger);
 
