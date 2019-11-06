@@ -129,7 +129,8 @@ class Predator {
         prey.reset();
         this.score ++;
 
-        prey.speed += 0.2;
+        prey.speed += 0.5;
+        prey.preyAmount ++;
       }
     }
   }

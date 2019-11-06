@@ -37,6 +37,8 @@ class Prey {
 
     this.visionCalm = color(0, 200, 0, 50);
     this.visionAggro = color(200, 0, 0, 50);
+
+    this.preyAmount = 1;
   }
 
   // move
