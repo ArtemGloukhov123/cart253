@@ -14,8 +14,8 @@ class Bush {
     this.image = img; //image of the bush
 
     // Position
-    this.x = [];
-    this.y = [];
+    this.x = x;
+    this.y = y;
 
 
   }
@@ -24,7 +24,7 @@ class Bush {
   //
   // Display the bush in a random part of the canvas
 
-  display(bushAmount) {
+  display() {
     imageMode(CENTER);
     image(this.image, this.x, this.y);
   }

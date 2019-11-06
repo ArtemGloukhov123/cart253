@@ -11,13 +11,13 @@ let tigerImage;
 
 let hunter;
 
-let bush;
+let bushes = [];
+let bushAmount = 3;
 let bushImage;
 
 let zebraImage;
 let zebra;
 
-let level;
 
 //array for storing sprout images to make background
 let sprouts = [];
@@ -55,9 +55,6 @@ function setup() {
 
   zebra = new Prey(zebraImage, 200, 200, 3, 100, 25);
 
-  level = new Level(1);
-
-  level.setBushCoordinates(bush);
   setSproutCoordinates();
 }
 
@@ -87,7 +84,7 @@ function draw() {
 
   tiger.handleEating(zebra);
 
-  level.displayBushes(bush);
+bush.display();
 
   hunter.handleEating(tiger);
 
