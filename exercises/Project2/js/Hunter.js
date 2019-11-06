@@ -135,7 +135,8 @@ class Hunter {
     //won't harm tiger if tiger is hidden and hunter accidentally roams over bush
     if (!predator.hidden & d < this.radius + predator.radius) {
       predator.health -= 0.3;
-      predator.health = constrain(predator.health, 10, predator.maxHealth);
+      //constrained at over 1 so that image does not glitch
+      predator.health = constrain(predator.health, 1, predator.maxHealth);
     }
   }
 

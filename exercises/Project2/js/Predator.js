@@ -20,12 +20,12 @@ class Predator {
     // Velocity and speed
     this.vx = 0;
     this.vy = 0;
-    this.speed = speed;
+    this.defaultSpeed = speed;
+    this.speed = 0;
     // Health properties
     this.maxHealth = radius;
     this.health = this.maxHealth; // Must be AFTER defining this.maxHealth
-    this.healthLossPerMove = 0.1;
-    this.healthGainPerEat = 1;
+    this.healthGainPerEat = 1.5;
     // Display properties
     this.fillColor = fillColor;
     this.radius = this.health; // Radius is defined in terms of health
@@ -36,6 +36,8 @@ class Predator {
     this.rightKey = RIGHT_ARROW;
 
     this.hidden = false; //whether the player is hidden behind a bush or not
+
+    this.score = 0;
   }
 
   // handleInput
@@ -43,6 +45,13 @@ class Predator {
   // Checks if an arrow key is pressed and sets the predator's
   // velocity appropriately.
   handleInput() {
+    if(keyIsDown(16)) {
+      this.speed = 1.5 * this.defaultSpeed;
+    }
+    else {
+      this.speed = this.defaultSpeed;
+    }
+
     // Horizontal movement
     if (keyIsDown(this.leftKey)) {
       this.vx = -this.speed;
@@ -118,6 +127,9 @@ class Predator {
       // Check if the prey died and reset it if so
       if (prey.health < 5) {
         prey.reset();
+        this.score ++;
+
+        prey.speed += 0.2;
       }
     }
   }
@@ -144,6 +156,5 @@ class Predator {
     else {
       this.hidden = false;
     }
-  console.log("hidden " + this.hidden);
   }
 }

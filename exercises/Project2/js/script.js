@@ -11,7 +11,7 @@ let tigerImage;
 
 let hunter;
 
-let bushes = [];
+let bush;
 let bushAmount = 3;
 let bushImage;
 
@@ -24,6 +24,8 @@ let sprouts = [];
 let sproutX = [];
 let sproutY = [];
 let numberOfSprouts = 35;
+
+let gameIsOver = false;
 
 //preload
 //
@@ -66,33 +68,47 @@ function draw() {
   background(128, 235, 52);
   displaySprouts();
 
-  // Handle input for the tiger
-  tiger.handleInput();
-  hunter.move(tiger);
+  if (!gameIsOver) {
+    // Handle input for the tiger
+    tiger.handleInput();
+    hunter.move(tiger);
 
-  // Move all the "animals"
-  tiger.move();
+    // Move all the "animals"
+    tiger.move();
 
 
-  // Display all the "animals"
-  tiger.display();
-  hunter.display(tiger);
+    // Display all the "animals"
+    tiger.display();
+    hunter.display(tiger);
 
-  hunter.handleChasing(tiger);
+    hunter.handleChasing(tiger);
 
-  tiger.handleHiding(bush);
+    tiger.handleHiding(bush);
 
-  tiger.handleEating(zebra);
+    tiger.handleEating(zebra);
 
-bush.display();
+    bush.display();
 
-  hunter.handleEating(tiger);
+    hunter.handleEating(tiger);
 
-  zebra.move(tiger);
+    zebra.move(tiger);
 
-  zebra.display(tiger);
+    zebra.display(tiger);
 
-  zebra.handleRunning(tiger);
+    zebra.handleRunning(tiger);
+
+    displayScore();
+
+    if(tiger.health < 2) {
+      gameIsOver = true;
+    }
+
+    console.log(tiger.health);
+  }
+
+  if(gameIsOver) {
+    gameOverScreen();
+  }
 }
 
 //sets up all x and y values for the sprouts so that they may
@@ -108,5 +124,55 @@ function setSproutCoordinates() {
 function displaySprouts() {
   for (let i = 0; i < numberOfSprouts; i++) {
     image(sprouts[i], sproutX[i], sproutY[i]);
+  }
+}
+
+//display the score in the top left corner
+function displayScore() {
+  push();
+  textAlign(LEFT);
+  textSize(40);
+  text("SCORE: " + tiger.score, 10, 40);
+
+  textSize(20);
+  let rtext = "Press Left Shift to sprint\n";
+  rtext = rtext + "Hide behind the bush to avoid detection";
+  text(rtext, 10, height - 40);
+  pop();
+}
+
+
+function gameOverScreen() {
+  background(255, 50, 50);
+
+  push();
+  textSize(60);
+  textAlign(CENTER);
+  text("GAME OVER", width / 2, height * 0.4);
+
+  textSize(30);
+  text("You caught " + tiger.score + " prey before you got caught.", width/2, height/2);
+
+  text("Press mouse to restart.", width/2, height * 0.6);
+  pop();
+
+  //reset game on mouse click
+  if(mouseIsPressed) {
+    gameIsOver = false;
+    tiger.health = tiger.maxHealth;
+    //respawn tiger
+    tiger.x = random(width);
+    tiger.y = random(height);
+    tiger.display();
+    //reset score
+    tiger.score = 0;
+    //respawn hunter
+    hunter.x = random(width);
+    hunter.y = random(height);
+    hunter.display(tiger);
+    //respawn bush
+    bush.x = random(width);
+    bush.y = random(height);
+    bush.display();
   }
 }
