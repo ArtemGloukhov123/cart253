@@ -10,14 +10,17 @@ This project is to create a game with similar look and feel as Hotline Miami
 
 //angle of rotation for the player
 let angle = 0;
-
+let player = [];
 
 // preload()
 //
 // Description of preload
 
 function preload() {
-
+  player.push(loadImage('assets/images/Player.png'))
+  player.push(loadImage('assets/images/Player2.png'))
+  player.push(loadImage('assets/images/Player3.png'))
+  player.push(loadImage('assets/images/Player4.png'))
 }
 
 
@@ -46,20 +49,20 @@ function rotatePlayer() {
   let x = mouseX - width / 2;
   let y = mouseY - height / 2;
 
-  if (mouseX > 0 & mouseY < 0) {
-    angle = atan(x / y);
+  if (x > 0 && y < 0) {
+    angle = atan(abs(x) / abs(y));
   }
 
-  if (mouseX > 0 & mouseY > 0) {
-    angle = atan(y / x) + 90;
+  if (x > 0 && y > 0) {
+    angle = atan(abs(y) / abs(x)) + 90;
   }
 
-  if (mouseX < 0 & mouseY > 0) {
-    angle = atan(x / y) + 180;
+  if (x < 0 && y > 0) {
+    angle = atan(abs(x) / abs(y)) + 180;
   }
 
-  if (mouseX < 0 & mouseY < 0) {
-    angle = atan(y / x) + 270;
+  if (x < 0 && y < 0) {
+    angle = atan(abs(y) / abs(x)) + 270;
   }
 }
 
@@ -72,5 +75,9 @@ function displayPlayer() {
   translate(width / 2, height / 2);
   rotate(angle);
   rect(0, 0, 100, 100)
+
+  imageMode(CENTER);
+  image(player[0], 0, 0);
+
   pop();
 }
