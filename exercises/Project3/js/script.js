@@ -16,12 +16,15 @@ let legs = [];
 let imageNumber = 0;
 
 let stone = [];
-let stoneAmount = 60;
+let stoneAmount = 50;
 let stoneX = [];
 let stoneY = [];
 let stoneImage = [];
 
 let playerIsWalking = false;
+
+let bullet;
+let bulletImage;
 
 // preload()
 //
@@ -37,6 +40,8 @@ function preload() {
 
   //array of leg images
   preloadLegImages();
+
+  bulletImage = loadImage('assets/images/bullet.png');
 }
 
 
@@ -54,6 +59,7 @@ function setup() {
     stone.push(new Stone(stoneImage[i], stoneX[i], stoneY[i]));
   }
 
+  bullet = new Bullet(bulletImage);
 }
 
 
@@ -84,6 +90,10 @@ function draw() {
   rotatePlayer();
   handlePlayerInput();
   displayPlayer();
+
+  bullet.handleShooting();
+  bullet.display();
+  bullet.fly();
 }
 
 
@@ -142,7 +152,7 @@ function displayPlayer() {
 
 
 function handlePlayerInput() {
-  if (keyIsDown(87) | keyIsDown(83) | keyIsDown(65) | keyIsDown(68)) {
+  if (keyIsDown(87) || keyIsDown(83) || keyIsDown(65) || keyIsDown(68)) {
     playerIsWalking = true;
   } else {
     playerIsWalking = false;
@@ -184,19 +194,19 @@ function preloadTorsoImages() {
 
 
 function preloadLegImages() {
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 2; i++) {
     legs.push(loadImage('assets/images/Legs.png'))
   }
 
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 10; i++) {
     legs.push(loadImage('assets/images/Legs2.png'))
   }
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 2; i++) {
     legs.push(loadImage('assets/images/Legs3.png'))
   }
 
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 10; i++) {
     legs.push(loadImage('assets/images/Legs4.png'))
   }
 }
