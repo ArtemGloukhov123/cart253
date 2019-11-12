@@ -20,61 +20,40 @@ let i = 0;
 // Description of preload
 
 function preload() {
-  player.push(loadImage('assets/images/Player.png'))
-  player.push(loadImage('assets/images/Player.png'))
-  player.push(loadImage('assets/images/Player.png'))
 
-  player.push(loadImage('assets/images/Player2.png'))
-  player.push(loadImage('assets/images/Player2.png'))
-  player.push(loadImage('assets/images/Player2.png'))
-  player.push(loadImage('assets/images/Player2.png'))
-  player.push(loadImage('assets/images/Player2.png'))
-  player.push(loadImage('assets/images/Player2.png'))
-  player.push(loadImage('assets/images/Player2.png'))
-  player.push(loadImage('assets/images/Player2.png'))
-  player.push(loadImage('assets/images/Player2.png'))
+  //array of torso images
+  for (let i = 0; i < 3; i++) {
+    player.push(loadImage('assets/images/Player.png'))
+  }
 
-  player.push(loadImage('assets/images/Player3.png'))
-  player.push(loadImage('assets/images/Player3.png'))
-  player.push(loadImage('assets/images/Player3.png'))
+  for (let i = 0; i < 9; i++) {
+    player.push(loadImage('assets/images/Player2.png'))
+  }
 
-  player.push(loadImage('assets/images/Player4.png'))
-  player.push(loadImage('assets/images/Player4.png'))
-  player.push(loadImage('assets/images/Player4.png'))
-  player.push(loadImage('assets/images/Player4.png'))
-  player.push(loadImage('assets/images/Player4.png'))
-  player.push(loadImage('assets/images/Player4.png'))
-  player.push(loadImage('assets/images/Player4.png'))
-  player.push(loadImage('assets/images/Player4.png'))
-  player.push(loadImage('assets/images/Player4.png'))
+  for (let i = 0; i < 3; i++) {
+    player.push(loadImage('assets/images/Player3.png'))
+  }
 
-  legs.push(loadImage('assets/images/Legs.png'))
-  legs.push(loadImage('assets/images/Legs.png'))
-  legs.push(loadImage('assets/images/Legs.png'))
+  for (let i = 0; i < 9; i++) {
+    player.push(loadImage('assets/images/Player4.png'))
+  }
 
-  legs.push(loadImage('assets/images/Legs2.png'))
-  legs.push(loadImage('assets/images/Legs2.png'))
-  legs.push(loadImage('assets/images/Legs2.png'))
-  legs.push(loadImage('assets/images/Legs2.png'))
-  legs.push(loadImage('assets/images/Legs2.png'))
-  legs.push(loadImage('assets/images/Legs2.png'))
-  legs.push(loadImage('assets/images/Legs2.png'))
-  legs.push(loadImage('assets/images/Legs2.png'))
-  legs.push(loadImage('assets/images/Legs2.png'))
+  //array of leg images
+  for (let i = 0; i < 3; i++) {
+    legs.push(loadImage('assets/images/Legs.png'))
+  }
 
-  legs.push(loadImage('assets/images/Legs3.png'))
-  legs.push(loadImage('assets/images/Legs3.png'))
-  legs.push(loadImage('assets/images/Legs3.png'))
+  for (let i = 0; i < 9; i++) {
+    legs.push(loadImage('assets/images/Legs2.png'))
+  }
 
-  legs.push(loadImage('assets/images/Legs4.png'))
-  legs.push(loadImage('assets/images/Legs4.png'))
-  legs.push(loadImage('assets/images/Legs4.png'))
-  legs.push(loadImage('assets/images/Legs4.png'))
-  legs.push(loadImage('assets/images/Legs4.png'))
-  legs.push(loadImage('assets/images/Legs4.png'))
-  legs.push(loadImage('assets/images/Legs4.png'))
-  legs.push(loadImage('assets/images/Legs4.png'))
-  legs.push(loadImage('assets/images/Legs4.png'))
+  for (let i = 0; i < 3; i++) {
+    legs.push(loadImage('assets/images/Legs3.png'))
+  }
+
+  for (let i = 0; i < 9; i++) {
+    legs.push(loadImage('assets/images/Legs4.png'))
+  }
 }
 
 
@@ -83,7 +62,7 @@ function preload() {
 // Description of setup
 
 function setup() {
-  createCanvas(500, 500);
+  createCanvas(700, 700);
 }
 
 
@@ -97,10 +76,9 @@ function draw() {
 
   rotatePlayer();
 
-  if(keyIsDown(87)) {
+  if (keyIsDown(87)) {
     playerWalking();
-  }
-  else {
+  } else {
     displayPlayer();
   }
 }
