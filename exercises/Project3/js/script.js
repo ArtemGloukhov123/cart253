@@ -11,6 +11,7 @@ This project is to create a game with similar look and feel as Hotline Miami
 //angle of rotation for the player
 let angle = 0;
 let player = [];
+let legs = [];
 
 let i = 0;
 
@@ -46,6 +47,34 @@ function preload() {
   player.push(loadImage('assets/images/Player4.png'))
   player.push(loadImage('assets/images/Player4.png'))
   player.push(loadImage('assets/images/Player4.png'))
+
+  legs.push(loadImage('assets/images/Legs.png'))
+  legs.push(loadImage('assets/images/Legs.png'))
+  legs.push(loadImage('assets/images/Legs.png'))
+
+  legs.push(loadImage('assets/images/Legs2.png'))
+  legs.push(loadImage('assets/images/Legs2.png'))
+  legs.push(loadImage('assets/images/Legs2.png'))
+  legs.push(loadImage('assets/images/Legs2.png'))
+  legs.push(loadImage('assets/images/Legs2.png'))
+  legs.push(loadImage('assets/images/Legs2.png'))
+  legs.push(loadImage('assets/images/Legs2.png'))
+  legs.push(loadImage('assets/images/Legs2.png'))
+  legs.push(loadImage('assets/images/Legs2.png'))
+
+  legs.push(loadImage('assets/images/Legs3.png'))
+  legs.push(loadImage('assets/images/Legs3.png'))
+  legs.push(loadImage('assets/images/Legs3.png'))
+
+  legs.push(loadImage('assets/images/Legs4.png'))
+  legs.push(loadImage('assets/images/Legs4.png'))
+  legs.push(loadImage('assets/images/Legs4.png'))
+  legs.push(loadImage('assets/images/Legs4.png'))
+  legs.push(loadImage('assets/images/Legs4.png'))
+  legs.push(loadImage('assets/images/Legs4.png'))
+  legs.push(loadImage('assets/images/Legs4.png'))
+  legs.push(loadImage('assets/images/Legs4.png'))
+  legs.push(loadImage('assets/images/Legs4.png'))
 }
 
 
@@ -105,6 +134,7 @@ function displayPlayer() {
   rotate(angle);
 
   imageMode(CENTER);
+  image(legs[0], 0, 0);
   image(player[0], 0, 0);
 
   pop();
@@ -117,7 +147,10 @@ function playerWalking() {
     translate(width / 2, height / 2);
     rotate(angle);
     imageMode(CENTER);
+
+    image(legs[i], 0, 0);
     image(player[i], 0, 0);
+
     i++;
 
     if (i > 23) {
