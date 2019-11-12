@@ -12,14 +12,39 @@ This project is to create a game with similar look and feel as Hotline Miami
 let angle = 0;
 let player = [];
 
+let i = 0;
+
 // preload()
 //
 // Description of preload
 
 function preload() {
   player.push(loadImage('assets/images/Player.png'))
+  player.push(loadImage('assets/images/Player.png'))
+  player.push(loadImage('assets/images/Player.png'))
+
   player.push(loadImage('assets/images/Player2.png'))
+  player.push(loadImage('assets/images/Player2.png'))
+  player.push(loadImage('assets/images/Player2.png'))
+  player.push(loadImage('assets/images/Player2.png'))
+  player.push(loadImage('assets/images/Player2.png'))
+  player.push(loadImage('assets/images/Player2.png'))
+  player.push(loadImage('assets/images/Player2.png'))
+  player.push(loadImage('assets/images/Player2.png'))
+  player.push(loadImage('assets/images/Player2.png'))
+
   player.push(loadImage('assets/images/Player3.png'))
+  player.push(loadImage('assets/images/Player3.png'))
+  player.push(loadImage('assets/images/Player3.png'))
+
+  player.push(loadImage('assets/images/Player4.png'))
+  player.push(loadImage('assets/images/Player4.png'))
+  player.push(loadImage('assets/images/Player4.png'))
+  player.push(loadImage('assets/images/Player4.png'))
+  player.push(loadImage('assets/images/Player4.png'))
+  player.push(loadImage('assets/images/Player4.png'))
+  player.push(loadImage('assets/images/Player4.png'))
+  player.push(loadImage('assets/images/Player4.png'))
   player.push(loadImage('assets/images/Player4.png'))
 }
 
@@ -40,9 +65,15 @@ function setup() {
 function draw() {
   background(20);
 
-  displayPlayer();
+
   rotatePlayer();
 
+  if(keyIsDown(87)) {
+    playerWalking();
+  }
+  else {
+    displayPlayer();
+  }
 }
 
 function rotatePlayer() {
@@ -68,16 +99,29 @@ function rotatePlayer() {
 
 function displayPlayer() {
   push();
-  noStroke();
-  fill(200);
-  rectMode(CENTER);
+
   angleMode(DEGREES);
   translate(width / 2, height / 2);
   rotate(angle);
-  rect(0, 0, 100, 100)
 
   imageMode(CENTER);
   image(player[0], 0, 0);
 
   pop();
+}
+
+function playerWalking() {
+  if (keyIsDown(87)) {
+
+    angleMode(DEGREES);
+    translate(width / 2, height / 2);
+    rotate(angle);
+    imageMode(CENTER);
+    image(player[i], 0, 0);
+    i++;
+
+    if (i > 23) {
+      i = 0;
+    }
+  }
 }
