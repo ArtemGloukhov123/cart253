@@ -13,7 +13,15 @@ let angle = 0;
 let player = [];
 let legs = [];
 
-let i = 0;
+let imageNumber = 0;
+
+let stone = [];
+let stoneAmount = 60;
+let stoneX = [];
+let stoneY = [];
+let stoneImage = [];
+
+let playerIsWalking = false;
 
 // preload()
 //
@@ -21,39 +29,14 @@ let i = 0;
 
 function preload() {
 
+  //load array of stone images
+  preloadStoneImages();
+
   //array of torso images
-  for (let i = 0; i < 3; i++) {
-    player.push(loadImage('assets/images/Player.png'))
-  }
-
-  for (let i = 0; i < 9; i++) {
-    player.push(loadImage('assets/images/Player2.png'))
-  }
-
-  for (let i = 0; i < 3; i++) {
-    player.push(loadImage('assets/images/Player3.png'))
-  }
-
-  for (let i = 0; i < 9; i++) {
-    player.push(loadImage('assets/images/Player4.png'))
-  }
+  preloadTorsoImages();
 
   //array of leg images
-  for (let i = 0; i < 3; i++) {
-    legs.push(loadImage('assets/images/Legs.png'))
-  }
-
-  for (let i = 0; i < 9; i++) {
-    legs.push(loadImage('assets/images/Legs2.png'))
-  }
-
-  for (let i = 0; i < 3; i++) {
-    legs.push(loadImage('assets/images/Legs3.png'))
-  }
-
-  for (let i = 0; i < 9; i++) {
-    legs.push(loadImage('assets/images/Legs4.png'))
-  }
+  preloadLegImages();
 }
 
 
@@ -63,7 +46,20 @@ function preload() {
 
 function setup() {
   createCanvas(700, 700);
+
+  //load stone X and Y values
+  setupStoneXYValues();
+
+  for (let i = 0; i < stoneAmount; i++) {
+    stone.push(new Stone(stoneImage[i], stoneX[i], stoneY[i]));
+  }
+
 }
+
+
+
+
+
 
 
 // draw()
@@ -71,17 +67,31 @@ function setup() {
 // Description of draw()
 
 function draw() {
-  background(20);
+  background(45);
 
+  for (let i = 0; i < stoneAmount; i++) {
+    stone[i].display(stoneImage[i], stoneX[i], stoneY[i]);
+  }
+
+  for (let i = 0; i < stoneAmount; i++) {
+    stone[i].move();
+  }
+
+  for (let i = 0; i < stoneAmount; i++) {
+    stone[i].handleWrapping();
+  }
 
   rotatePlayer();
-
-  if (keyIsDown(87)) {
-    playerWalking();
-  } else {
-    displayPlayer();
-  }
+  handlePlayerInput();
+  displayPlayer();
 }
+
+
+
+
+
+
+
 
 function rotatePlayer() {
   let x = mouseX - width / 2;
@@ -111,28 +121,92 @@ function displayPlayer() {
   translate(width / 2, height / 2);
   rotate(angle);
 
-  imageMode(CENTER);
-  image(legs[0], 0, 0);
-  image(player[0], 0, 0);
+  if (playerIsWalking) {
+    image(legs[imageNumber], 0, 0);
+    image(player[imageNumber], 0, 0);
 
+    imageNumber++;
+
+    if (imageNumber > 23) {
+      imageNumber = 0;
+    }
+  }
+
+  else {
+    imageMode(CENTER);
+    image(legs[0], 0, 0);
+    image(player[0], 0, 0);
+  }
   pop();
 }
 
-function playerWalking() {
-  if (keyIsDown(87)) {
 
-    angleMode(DEGREES);
-    translate(width / 2, height / 2);
-    rotate(angle);
-    imageMode(CENTER);
+function handlePlayerInput() {
+  if (keyIsDown(87) | keyIsDown(83) | keyIsDown(65) | keyIsDown(68)) {
+    playerIsWalking = true;
+  } else {
+    playerIsWalking = false;
+  }
+}
 
-    image(legs[i], 0, 0);
-    image(player[i], 0, 0);
 
-    i++;
 
-    if (i > 23) {
-      i = 0;
-    }
+function preloadStoneImages() {
+  for (let i = 0; i < (stoneAmount / 7); i++) {
+    stoneImage.push(loadImage('assets/images/stone.png'))
+    stoneImage.push(loadImage('assets/images/stone2.png'))
+    stoneImage.push(loadImage('assets/images/stone3.png'))
+    stoneImage.push(loadImage('assets/images/stone4.png'))
+    stoneImage.push(loadImage('assets/images/stone5.png'))
+    stoneImage.push(loadImage('assets/images/stone4.png'))
+    stoneImage.push(loadImage('assets/images/stone5.png'))
+  }
+}
+
+
+function preloadTorsoImages() {
+  for (let i = 0; i < 3; i++) {
+    player.push(loadImage('assets/images/Player.png'))
+  }
+
+  for (let i = 0; i < 9; i++) {
+    player.push(loadImage('assets/images/Player2.png'))
+  }
+
+  for (let i = 0; i < 3; i++) {
+    player.push(loadImage('assets/images/Player3.png'))
+  }
+
+  for (let i = 0; i < 9; i++) {
+    player.push(loadImage('assets/images/Player4.png'))
+  }
+}
+
+
+function preloadLegImages() {
+  for (let i = 0; i < 3; i++) {
+    legs.push(loadImage('assets/images/Legs.png'))
+  }
+
+  for (let i = 0; i < 9; i++) {
+    legs.push(loadImage('assets/images/Legs2.png'))
+  }
+
+  for (let i = 0; i < 3; i++) {
+    legs.push(loadImage('assets/images/Legs3.png'))
+  }
+
+  for (let i = 0; i < 9; i++) {
+    legs.push(loadImage('assets/images/Legs4.png'))
+  }
+}
+
+
+function setupStoneXYValues() {
+
+  //random X value within the canvas
+  for (let i = 0; i < stoneAmount; i++) {
+    stoneX.push(random(width));
+    stoneY.push(random(height));
   }
 }
