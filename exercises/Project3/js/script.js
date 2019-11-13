@@ -94,6 +94,7 @@ function draw() {
   bullet.handleShooting();
   bullet.display();
   bullet.fly();
+  bullet.move();
 }
 
 

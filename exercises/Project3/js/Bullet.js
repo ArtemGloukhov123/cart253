@@ -19,7 +19,7 @@ class Bullet {
     this.vx = 0;
     this.vy = 0;
 
-    this.speed = 20;
+    this.speed = 10;
 
     this.angle = 0;
 
@@ -27,6 +27,8 @@ class Bullet {
 
     this.cooldown = 0;
     this.cooldownMax = 30;
+
+    this.moveSpeed = 5;
   }
 
   //when mouse is pressed, register vx and vy for that bullet
@@ -85,5 +87,34 @@ class Bullet {
       this.angle = atan(abs(y) / abs(x)) + 270;
     }
     console.log("angle is " + this.angle);
+  }
+
+  move() {
+    //W is pressed
+    if (keyIsDown(87)) {
+      this.vy = this.moveSpeed;
+    }
+    //S is pressed
+    else if (keyIsDown(83)) {
+      this.vy = -this.moveSpeed;
+    }
+    else {
+      this.vy = 0;
+    }
+
+    //A is pressed
+    if (keyIsDown(65)) {
+      this.vx = this.moveSpeed;
+    }
+    //D is pressed
+    else if (keyIsDown(68)) {
+      this.vx = -this.moveSpeed;
+    }
+    else {
+      this.vx = 0;
+    }
+
+    this.x += this.vx;
+    this.y += this.vy;
   }
 }
