@@ -37,8 +37,7 @@ class Stone {
     //S is pressed
     else if (keyIsDown(83)) {
       this.vy = -this.speed;
-    }
-    else {
+    } else {
       this.vy = 0;
     }
 
@@ -49,8 +48,7 @@ class Stone {
     //D is pressed
     else if (keyIsDown(68)) {
       this.vx = -this.speed;
-    }
-    else {
+    } else {
       this.vx = 0;
     }
 
@@ -60,19 +58,17 @@ class Stone {
 
 
   handleWrapping() {
-    if(this.x < 0) {
+    if (this.x < 0) {
       this.x += width;
-    }
-
-    else if(this.x > width) {
+    } else if (this.x > width) {
       this.x -= width;
     }
 
-    if(this.y < 0) {
+    if (this.y < 0) {
       this.y += height;
     }
 
-    if(this.y > height) {
+    if (this.y > height) {
       this.y -= height;
     }
   }

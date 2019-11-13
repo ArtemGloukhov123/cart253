@@ -13,8 +13,8 @@ class Bullet {
     this.image = img;
 
     //origin point of the bullet, always starts from center
-    this.x = width/2;
-    this.y = height/2;
+    this.x = width / 2;
+    this.y = height / 2;
 
     this.vx = 0;
     this.vy = 0;
@@ -31,21 +31,22 @@ class Bullet {
     this.moveSpeed = 5;
   }
 
-  //when mouse is pressed, register vx and vy for that bullet
+  //when mouse is pressed, register angle for that bullet
   handleShooting() {
-    this.cooldown --;
+    this.cooldown--;
     this.cooldown = constrain(this.cooldown, 0, this.cooldownMax);
 
-    if(mouseIsPressed && this.cooldown === 0) {
+    if (mouseIsPressed && this.cooldown === 0) {
       this.flyDirection();
       this.angleValues.push(this.angle);
 
       this.cooldown = this.cooldownMax;
-      this.x = width/2;
-      this.y = height/2;
+      this.x = width / 2;
+      this.y = height / 2;
     }
   }
 
+  //have bullet fly at the angle recorded
   fly() {
     let i = this.angleValues.length - 1;
 
@@ -61,15 +62,16 @@ class Bullet {
     console.log("this x is " + this.x);
   }
 
-
+  //show image of bullet
   display() {
     image(this.image, this.x, this.y);
   }
 
-
+  //determine angle of mouse from its x and y values, used for angle
+  //of bullet
   flyDirection() {
     let x = mouseX - width / 2;
-    let y = height / 2 - mouseY ;
+    let y = height / 2 - mouseY;
 
     if (x > 0 && y < 0) {
       this.angle = atan(abs(x) / abs(y));
@@ -86,7 +88,6 @@ class Bullet {
     if (x < 0 && y < 0) {
       this.angle = atan(abs(y) / abs(x)) + 270;
     }
-    console.log("angle is " + this.angle);
   }
 
   move() {
@@ -97,8 +98,7 @@ class Bullet {
     //S is pressed
     else if (keyIsDown(83)) {
       this.vy = -this.moveSpeed;
-    }
-    else {
+    } else {
       this.vy = 0;
     }
 
@@ -109,8 +109,7 @@ class Bullet {
     //D is pressed
     else if (keyIsDown(68)) {
       this.vx = -this.moveSpeed;
-    }
-    else {
+    } else {
       this.vx = 0;
     }
 

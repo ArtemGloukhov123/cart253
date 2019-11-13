@@ -10,26 +10,36 @@ This project is to create a game with similar look and feel as Hotline Miami
 
 //angle of rotation for the player
 let angle = 0;
+//array for player torso sprites
 let player = [];
+//array for leg sprites
 let legs = [];
 
+//current sprite number
 let imageNumber = 0;
 
+//array for stone objects
 let stone = [];
+//amount of stones in the background
 let stoneAmount = 50;
+//array for x and y values of stones
 let stoneX = [];
 let stoneY = [];
+//array for stone images used for background
 let stoneImage = [];
 
+//tells the program whether to display the walking animation
 let playerIsWalking = false;
 
+//bullet object
 let bullet;
+//bullet sprite
 let bulletImage;
+
 
 // preload()
 //
-// Description of preload
-
+// Preload images
 function preload() {
 
   //load array of stone images
@@ -41,90 +51,99 @@ function preload() {
   //array of leg images
   preloadLegImages();
 
+  //bullet only has one sprite
   bulletImage = loadImage('assets/images/bullet.png');
 }
 
 
 // setup()
 //
-// Description of setup
-
+// create canvas and objects
 function setup() {
-  createCanvas(700, 700);
+  createCanvas(windowWidth, windowHeight);
 
   //load stone X and Y values
   setupStoneXYValues();
 
+  //create array of stone objects with their own x and y values
   for (let i = 0; i < stoneAmount; i++) {
     stone.push(new Stone(stoneImage[i], stoneX[i], stoneY[i]));
   }
 
+  //create the bullet object
   bullet = new Bullet(bulletImage);
 }
 
 
 
-
-
-
-
 // draw()
 //
-// Description of draw()
+// handle the player walking and shooting
 
 function draw() {
   background(45);
 
+  //display all stones from array
   for (let i = 0; i < stoneAmount; i++) {
     stone[i].display(stoneImage[i], stoneX[i], stoneY[i]);
   }
 
+  //move stones when player is "walking", this creates illusion of player moving
   for (let i = 0; i < stoneAmount; i++) {
     stone[i].move();
   }
 
+  //wrap stones around screen to have looping background
   for (let i = 0; i < stoneAmount; i++) {
     stone[i].handleWrapping();
   }
 
+  //have player face mouse
   rotatePlayer();
+  //handle player controls
   handlePlayerInput();
   displayPlayer();
 
+  //shooting input (mouse click)
   bullet.handleShooting();
   bullet.display();
+  //have bullet fly towards mouse
   bullet.fly();
+  //bullet moves just like the stones
   bullet.move();
 }
 
 
-
-
-
-
-
-
+//determine the angle the player needs to be rotated to
 function rotatePlayer() {
+  //x and y have 0 location in middle of screen, creating a cartesian
+  //coordiante system
   let x = mouseX - width / 2;
   let y = mouseY - height / 2;
 
+  //top right quadrant
   if (x > 0 && y < 0) {
     angle = atan(abs(x) / abs(y));
   }
 
+  //bottom right quadrant
   if (x > 0 && y > 0) {
     angle = atan(abs(y) / abs(x)) + 90;
   }
 
+  //bottom left quadrant
   if (x < 0 && y > 0) {
     angle = atan(abs(x) / abs(y)) + 180;
   }
 
+  //top left quadrant
   if (x < 0 && y < 0) {
     angle = atan(abs(y) / abs(x)) + 270;
   }
 }
 
+//display the player being rotated towards the mouseX
+//and display animation if correct input
 function displayPlayer() {
   push();
 
@@ -138,12 +157,11 @@ function displayPlayer() {
 
     imageNumber++;
 
+    //23 is the number of sprites in the animation
     if (imageNumber > 23) {
       imageNumber = 0;
     }
-  }
-
-  else {
+  } else {
     imageMode(CENTER);
     image(legs[0], 0, 0);
     image(player[0], 0, 0);
