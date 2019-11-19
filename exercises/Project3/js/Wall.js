@@ -1,23 +1,24 @@
-//stone
-//used for adding texture to the ground
+//Wall
+//used for making buildings
 
-class Stone {
+class Wall {
 
   // constructor
   //
   // Sets the initial values for the Predator's properties
   // Either sets default values or uses the arguments provided
-  constructor(img, x, y) {
-
-    this.image = img;
+  constructor(x, y, w, h) {
 
     this.x = x;
     this.y = y;
 
+    this.w = w;
+    this.h = h;
+
     this.vx = 0;
     this.vy = 0;
 
-    this.speed = 5.2;
+    this.speed = 5;
   }
 
   // display
@@ -25,8 +26,11 @@ class Stone {
   // Display the stone in a random part of the canvas
 
   display() {
-    imageMode(CENTER);
-    image(this.image, this.x, this.y);
+    push();
+    noStroke();
+    rectMode(CORNER);
+    rect(this.x, this.y, this.w, this.h);
+    pop();
   }
 
   move() {
@@ -56,20 +60,22 @@ class Stone {
     this.y += this.vy;
   }
 
+checkPlayerCollision() {
+  let playerX = width/2;
+  let playerY = height/2;
 
-  handleWrapping() {
-    if (this.x < 0) {
-      this.x += width;
-    } else if (this.x > width) {
-      this.x -= width;
-    }
+  let wallTop = this.y;
+  let wallBottom = this.y + this.h;
+  let wallLeft = this.x;
+  let wallRight = this.x + this.w;
 
-    if (this.y < 0) {
-      this.y += height;
-    }
-
-    if (this.y > height) {
-      this.y -= height;
-    }
+  if(playerX < wallRight && playerX > wallLeft && playerY < wallBottom && playerY > wallTop) {
+    playerCollided = true;
+    console.log("I'm in a wall!")
   }
+  else {
+    playerCollided = false;
+  }
+}
+
 }

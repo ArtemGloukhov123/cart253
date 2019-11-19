@@ -15,6 +15,11 @@ let player = [];
 //array for leg sprites
 let legs = [];
 
+
+//array for player torso sprites
+let enemyImages = [];
+
+
 //current sprite number
 let imageNumber = 0;
 
@@ -31,10 +36,22 @@ let stoneImage = [];
 //tells the program whether to display the walking animation
 let playerIsWalking = false;
 
+//tells program that player has hit wall
+let playerCollided = false;
+
 //bullet object
 let bullet;
 //bullet sprite
 let bulletImage;
+
+
+let westWall;
+let northWall;
+let eastWall;
+
+let floor;
+
+let enemy;
 
 
 // preload()
@@ -50,6 +67,9 @@ function preload() {
 
   //array of leg images
   preloadLegImages();
+
+  //preload enemy sprites
+  preloadEnemyImages();
 
   //bullet only has one sprite
   bulletImage = loadImage('assets/images/bullet.png');
@@ -72,6 +92,15 @@ function setup() {
 
   //create the bullet object
   bullet = new Bullet(bulletImage);
+
+  //create west wall object
+  westWall = new Wall(50, 50, 20, 500);
+  eastWall = new Wall(650, 50, 20, 500);
+  northWall = new Wall(50, 50, 600, 20);
+
+  floor = new Floor(50, 50, 600, 500);
+
+  enemy = new Enemy(100, 100);
 }
 
 
@@ -83,34 +112,51 @@ function setup() {
 function draw() {
   background(45);
 
-  //display all stones from array
-  for (let i = 0; i < stoneAmount; i++) {
-    stone[i].display(stoneImage[i], stoneX[i], stoneY[i]);
-  }
+  displayStones();
 
-  //move stones when player is "walking", this creates illusion of player moving
-  for (let i = 0; i < stoneAmount; i++) {
-    stone[i].move();
-  }
+  //handle bullet collision with all walls
+  bullet.handleHorizontalCollision(westWall);
+  bullet.handleVertcalCollision(northWall);
+  bullet.handleHorizontalCollision(eastWall);
 
-  //wrap stones around screen to have looping background
-  for (let i = 0; i < stoneAmount; i++) {
-    stone[i].handleWrapping();
-  }
+  floor.display();
 
-  //have player face mouse
-  rotatePlayer();
-  //handle player controls
-  handlePlayerInput();
-  displayPlayer();
+
+  westWall.display();
+  northWall.display();
+  eastWall.display();
+
+  westWall.move();
+  northWall.move();
+  eastWall.move();
+  floor.move();
+  bullet.move();
+  enemy.move();
+
+  westWall.checkPlayerCollision();
+  northWall.checkPlayerCollision();
+  eastWall.checkPlayerCollision();
 
   //shooting input (mouse click)
   bullet.handleShooting();
   bullet.display();
   //have bullet fly towards mouse
   bullet.fly();
-  //bullet moves just like the stones
-  bullet.move();
+
+
+  //have player face mouse
+  rotatePlayer();
+  //handle player controls
+
+  handlePlayerInput();
+  displayPlayer();
+
+
+  enemy.display();
+  enemy.checkIfShot(bullet);
+  enemy.wander(floor);
+  enemy.handleChasing();
+  enemy.handleDeath();
 }
 
 
@@ -172,7 +218,9 @@ function displayPlayer() {
 
 function handlePlayerInput() {
   if (keyIsDown(87) || keyIsDown(83) || keyIsDown(65) || keyIsDown(68)) {
+
     playerIsWalking = true;
+
   } else {
     playerIsWalking = false;
   }
@@ -230,6 +278,26 @@ function preloadLegImages() {
   }
 }
 
+function preloadEnemyImages() {
+  for (let i = 0; i < 3; i++) {
+    enemyImages.push(loadImage('assets/images/enemy1.png'))
+  }
+
+  for (let i = 0; i < 9; i++) {
+    enemyImages.push(loadImage('assets/images/enemy2.png'))
+  }
+
+  for (let i = 0; i < 3; i++) {
+    enemyImages.push(loadImage('assets/images/enemy3.png'))
+  }
+
+  for (let i = 0; i < 9; i++) {
+    enemyImages.push(loadImage('assets/images/enemy4.png'))
+  }
+}
+
+
+
 
 function setupStoneXYValues() {
 
@@ -237,5 +305,23 @@ function setupStoneXYValues() {
   for (let i = 0; i < stoneAmount; i++) {
     stoneX.push(random(width));
     stoneY.push(random(height));
+  }
+}
+
+
+function displayStones() {
+  //display all stones from array
+  for (let i = 0; i < stoneAmount; i++) {
+    stone[i].display(stoneImage[i], stoneX[i], stoneY[i]);
+  }
+
+  //move stones when player is "walking", this creates illusion of player moving
+  for (let i = 0; i < stoneAmount; i++) {
+    stone[i].move();
+  }
+
+  //wrap stones around screen to have looping background
+  for (let i = 0; i < stoneAmount; i++) {
+    stone[i].handleWrapping();
   }
 }

@@ -19,7 +19,7 @@ class Bullet {
     this.vx = 0;
     this.vy = 0;
 
-    this.speed = 10;
+    this.speed = 15;
 
     this.angle = 0;
 
@@ -29,6 +29,8 @@ class Bullet {
     this.cooldownMax = 30;
 
     this.moveSpeed = 5;
+
+    this.collided = false;
   }
 
   //when mouse is pressed, register angle for that bullet
@@ -37,6 +39,7 @@ class Bullet {
     this.cooldown = constrain(this.cooldown, 0, this.cooldownMax);
 
     if (mouseIsPressed && this.cooldown === 0) {
+      this.collided = false;
       this.flyDirection();
       this.angleValues.push(this.angle);
 
@@ -59,12 +62,13 @@ class Bullet {
 
     this.x += this.vx;
     this.y += this.vy;
-    console.log("this x is " + this.x);
   }
 
   //show image of bullet
   display() {
-    image(this.image, this.x, this.y);
+    if (!this.collided) {
+      image(this.image, this.x, this.y);
+    }
   }
 
   //determine angle of mouse from its x and y values, used for angle
@@ -115,5 +119,31 @@ class Bullet {
 
     this.x += this.vx;
     this.y += this.vy;
+  }
+
+  handleHorizontalCollision(wall) {
+    let wallTop = wall.y;
+    let wallBottom = wall.y + wall.h;
+    let wallLeft = wall.x;
+    let wallRight = wall.x + wall.w;
+
+    if (this.x < wallRight && this.x > wallLeft) {
+      if (this.y < wallBottom && this.y > wallTop) {
+        this.angle = -this.angle;
+      }
+    }
+  }
+
+  handleVertcalCollision(wall) {
+    let wallTop = wall.y;
+    let wallBottom = wall.y + wall.h;
+    let wallLeft = wall.x;
+    let wallRight = wall.x + wall.w;
+
+    if (this.y < wallBottom && this.y > wallTop) {
+      if (this.x < wallRight && this.x > wallLeft) {
+        this.angle = -(this.angle - 180);
+      }
+    }
   }
 }
