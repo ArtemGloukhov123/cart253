@@ -51,6 +51,7 @@ let eastWall;
 let floor;
 
 let enemy;
+let enemy2;
 
 
 // preload()
@@ -100,6 +101,7 @@ function setup() {
   floor = new Floor(50, 50, 600, 500);
 
   enemy = new Enemy(100, 100);
+  enemy2 = new Enemy(150, 100);
 }
 
 
@@ -131,6 +133,7 @@ function draw() {
   floor.move();
   bullet.move();
   enemy.move();
+  enemy2.move();
 
   westWall.checkPlayerCollision();
   northWall.checkPlayerCollision();
@@ -156,6 +159,12 @@ function draw() {
   enemy.wander(floor);
   enemy.handleChasing();
   enemy.handleDeath();
+
+  enemy2.display();
+  enemy2.checkIfShot(bullet);
+  enemy2.wander(floor);
+  enemy2.handleChasing();
+  enemy2.handleDeath();
 }
 
 
