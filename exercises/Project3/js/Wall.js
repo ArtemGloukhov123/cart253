@@ -8,7 +8,6 @@ class Wall {
   // Sets the initial values for the Predator's properties
   // Either sets default values or uses the arguments provided
   constructor(x, y, w, h) {
-
     this.x = x;
     this.y = y;
 
@@ -60,6 +59,7 @@ class Wall {
     this.y += this.vy;
   }
 
+
 checkPlayerCollision() {
   let playerX = width/2;
   let playerY = height/2;
@@ -71,10 +71,12 @@ checkPlayerCollision() {
 
   if(playerX < wallRight && playerX > wallLeft && playerY < wallBottom && playerY > wallTop) {
     playerCollided = true;
+    canMove = false;
     console.log("I'm in a wall!")
   }
   else {
     playerCollided = false;
+    canMove = true;
   }
 }
 

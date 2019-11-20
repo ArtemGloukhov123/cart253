@@ -18,12 +18,12 @@ class Enemy {
     this.walking = true;
     this.chasing = false;
 
-    this.visionRadius = 150;
+    this.visionRadius = 250;
 
     this.visionCalm = color(0, 200, 0, 50);
     this.visionAggro = color(200, 0, 0, 50);
 
-    this.speed = 5;
+    this.speed = 4;
 
 
     this.imageNumber = 0;
@@ -33,7 +33,9 @@ class Enemy {
 
     this.living = true;
 
-    this.hitboxRadius = 13;
+    this.hitboxRadius = 15;
+
+    this.enemyAngle = 0;
   }
 
   // display
@@ -42,12 +44,17 @@ class Enemy {
 
   display() {
     if (this.living) {
-      push()
+      push();
 
       //display vision circle
       noStroke();
 
-
+      if (this.chasing) {
+        this.rotateToPlayer();
+        translate(this.x, this.y);
+        rotate(this.enemyAngle);
+        translate(-this.x, -this.y);
+      }
 
       if (this.chasing) {
         fill(this.visionAggro);
@@ -94,6 +101,7 @@ class Enemy {
         this.y += 4;
         this.constrainArea();
       }
+      this.rotateToPlayer();
     } else {
       // Set velocity via noise()
       this.vx = map(noise(this.tx), 0, 1, -this.speed, this.speed);
@@ -124,22 +132,22 @@ class Enemy {
   move() {
     //W is pressed
     if (keyIsDown(87)) {
-      this.vy = this.speed;
+      this.vy = 5;
     }
     //S is pressed
     else if (keyIsDown(83)) {
-      this.vy = -this.speed;
+      this.vy = -5;
     } else {
       this.vy = 0;
     }
 
     //A is pressed
     if (keyIsDown(65)) {
-      this.vx = this.speed;
+      this.vx = 5;
     }
     //D is pressed
     else if (keyIsDown(68)) {
-      this.vx = -this.speed;
+      this.vx = -5;
     } else {
       this.vx = 0;
     }
@@ -199,11 +207,40 @@ class Enemy {
 
   }
 
-handleDeath() {
-  if(!this.living) {
-    this.x = -1000;
-    this.y = -1000;
+  handleDeath() {
+    if (!this.living) {
+      this.x = -1000;
+      this.y = -1000;
+    }
   }
-}
+
+
+  rotateToPlayer() {
+    let x = width / 2;
+    let y = height / 2;
+
+    //top right quadrant
+    if (x > this.x && y < this.y) {
+      this.enemyAngle = atan(abs(x - this.x) / abs(this.y - y));
+    }
+
+    //bottom right quadrant
+    if (x > this.x && y > this.y) {
+      this.enemyAngle = -atan(abs(x - this.x) / abs(y - this.y)) + 180;
+    }
+
+    //bottom left quadrant
+    if (x < this.x && y > this.y) {
+      this.enemyAngle = atan(abs(this.x - x) / abs(y - this.y)) + 180;
+    }
+
+    //top left quadrant
+    if (x < this.x && y < this.y) {
+      this.enemyAngle = atan(abs(this.y - y) / abs(this.x - x)) + 270;
+    }
+
+  }
+
+
 
 }

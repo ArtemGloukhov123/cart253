@@ -3,9 +3,7 @@
 /*****************
 Hotline Montreal
 Artem Gloukhov
-
 This project is to create a game with similar look and feel as Hotline Miami
-
 ******************/
 
 //angle of rotation for the player
@@ -44,6 +42,7 @@ let bullet;
 //bullet sprite
 let bulletImage;
 
+let canMove = true;
 
 let westWall;
 let northWall;
