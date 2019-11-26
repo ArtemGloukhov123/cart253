@@ -59,6 +59,24 @@ class Wall {
     this.y += this.vy;
   }
 
+  drive(car) {
+    //W is pressed
+    if (keyIsDown(87)) {
+      this.vx = (-sin(car.angle)) * this.speed * 2;
+      this.vy = (cos(car.angle)) * this.speed * 2;
+    }
+    else if (keyIsDown(83)) {
+      this.vx = -(-sin(car.angle)) * this.speed * 2;
+      this.vy = -(cos(car.angle)) * this.speed * 2;
+    }else {
+      this.vx = 0;
+      this.vy = 0;
+    }
+
+    this.x += this.vx;
+    this.y += this.vy;
+  }
+
 
 checkPlayerCollision() {
   let playerX = width/2;

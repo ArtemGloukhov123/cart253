@@ -53,6 +53,9 @@ let floor;
 let enemy;
 let enemy2;
 
+let car;
+let carImage;
+
 
 // preload()
 //
@@ -73,6 +76,7 @@ function preload() {
 
   //bullet only has one sprite
   bulletImage = loadImage('assets/images/bullet.png');
+  carImage = loadImage('assets/images/car.png');
 }
 
 
@@ -95,13 +99,15 @@ function setup() {
 
   //create west wall object
   westWall = new Wall(50, 50, 20, 500);
-  eastWall = new Wall(650, 50, 20, 500);
-  northWall = new Wall(50, 50, 600, 20);
+  eastWall = new Wall(550, 50, 20, 500);
+  northWall = new Wall(50, 50, 500, 20);
 
-  floor = new Floor(50, 50, 600, 500);
+  floor = new Floor(50, 50, 500, 500);
 
   enemy = new Enemy(100, 100);
   enemy2 = new Enemy(150, 100);
+
+  car = new Car(width/2, height/2, carImage);
 }
 
 
@@ -127,13 +133,8 @@ function draw() {
   northWall.display();
   eastWall.display();
 
-  westWall.move();
-  northWall.move();
-  eastWall.move();
-  floor.move();
-  bullet.move();
-  enemy.move();
-  enemy2.move();
+
+
 
   westWall.checkPlayerCollision();
   northWall.checkPlayerCollision();
@@ -150,9 +151,6 @@ function draw() {
   rotatePlayer();
   //handle player controls
 
-  handlePlayerInput();
-  displayPlayer();
-
 
   enemy.display();
   enemy.checkIfShot(bullet);
@@ -165,6 +163,34 @@ function draw() {
   enemy2.wander(floor);
   enemy2.handleChasing();
   enemy2.handleDeath();
+
+  car.display();
+
+  car.enterCar();
+
+  handlePlayerInput();
+
+if (!car.playerDriving) {
+  displayPlayer();
+  westWall.move();
+  northWall.move();
+  eastWall.move();
+  floor.move();
+  bullet.move();
+  enemy.move();
+  enemy2.move();
+  car.move()
+}
+
+if (car.playerDriving) {
+  westWall.drive(car);
+  northWall.drive(car);
+  eastWall.drive(car);
+  floor.drive(car);;
+  bullet.drive(car);
+  enemy.drive(car);
+  enemy2.drive(car);
+}
 }
 
 
@@ -323,10 +349,19 @@ function displayStones() {
     stone[i].display(stoneImage[i], stoneX[i], stoneY[i]);
   }
 
+if(!car.playerDriving){
   //move stones when player is "walking", this creates illusion of player moving
   for (let i = 0; i < stoneAmount; i++) {
     stone[i].move();
   }
+}
+
+if(car.playerDriving){
+  //move stones when player is "walking", this creates illusion of player moving
+  for (let i = 0; i < stoneAmount; i++) {
+    stone[i].drive(car);
+  }
+}
 
   //wrap stones around screen to have looping background
   for (let i = 0; i < stoneAmount; i++) {

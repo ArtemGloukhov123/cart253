@@ -121,6 +121,24 @@ class Bullet {
     this.y += this.vy;
   }
 
+  drive(car) {
+    //W is pressed
+    if (keyIsDown(87)) {
+      this.vx = (-sin(car.angle)) * this.speed;
+      this.vy = (cos(car.angle)) * this.speed;
+    }
+    else if (keyIsDown(83)) {
+      this.vx = -(-sin(car.angle)) * this.speed;
+      this.vy = -(cos(car.angle)) * this.speed;
+    }else {
+      this.vx = 0;
+      this.vy = 0;
+    }
+
+    this.x += this.vx;
+    this.y += this.vy;
+  }
+
   handleHorizontalCollision(wall) {
     let wallTop = wall.y;
     let wallBottom = wall.y + wall.h;
