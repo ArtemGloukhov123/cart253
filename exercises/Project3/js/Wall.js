@@ -33,24 +33,41 @@ class Wall {
   }
 
   move() {
+
     //W is pressed
     if (keyIsDown(87)) {
-      this.vy = this.speed;
+      if (canMoveUp) {
+        this.vy = 5;
+      } else {
+        this.vy = 0;
+      }
     }
     //S is pressed
     else if (keyIsDown(83)) {
-      this.vy = -this.speed;
+      if (canMoveDown) {
+        this.vy = -5;
+      } else {
+        this.vy = 0;
+      }
     } else {
       this.vy = 0;
     }
 
     //A is pressed
     if (keyIsDown(65)) {
-      this.vx = this.speed;
+      if (canMoveLeft) {
+        this.vx = 5;
+      } else {
+        this.vx = 0;
+      }
     }
     //D is pressed
     else if (keyIsDown(68)) {
-      this.vx = -this.speed;
+      if (canMoveRight) {
+        this.vx = -5;
+      } else {
+        this.vx = 0;
+      }
     } else {
       this.vx = 0;
     }
@@ -87,15 +104,33 @@ checkPlayerCollision() {
   let wallLeft = this.x;
   let wallRight = this.x + this.w;
 
-  if(playerX < wallRight && playerX > wallLeft && playerY < wallBottom && playerY > wallTop) {
-    playerCollided = true;
-    canMove = false;
-    console.log("I'm in a wall!")
+  let wallCenterX = this.x + (this.w/2);
+  let wallCenterY = this.y + (this.h/2);
+
+  //check if in left side of wall
+  if(playerX < wallCenterX && playerX > wallLeft && playerY < wallBottom && playerY > wallTop) {
+    canMoveRight = false;
+    console.log('player collided left side of wall');
+
   }
-  else {
-    playerCollided = false;
-    canMove = true;
+
+  //check if in right side of wall
+  if(playerX > wallCenterX && playerX < wallRight && playerY < wallBottom && playerY > wallTop) {
+    canMoveLeft = false;
+    console.log('player collided right side of wall');
   }
+
+  //check if in top side of wall
+  if(playerY < wallCenterY && playerY > wallTop && playerX < wallRight && playerX > wallLeft) {
+    canMoveDown = false;
+    console.log('player collided top side of wall');
+  }
+
+  //check if in bottom side of wall
+  if(playerY > wallCenterY && playerY < wallBottom && playerX < wallRight && playerX > wallLeft)  {
+    canMoveUp = false;
+    console.log('player collided bottom side of wall');
+  } 
 }
 
 }

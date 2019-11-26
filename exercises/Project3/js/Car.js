@@ -48,24 +48,41 @@ class Car {
   }
 
   move() {
+
     //W is pressed
     if (keyIsDown(87)) {
-      this.vy = 5;
+      if (canMoveUp) {
+        this.vy = 5;
+      } else {
+        this.vy = 0;
+      }
     }
     //S is pressed
     else if (keyIsDown(83)) {
-      this.vy = -5;
+      if (canMoveDown) {
+        this.vy = -5;
+      } else {
+        this.vy = 0;
+      }
     } else {
       this.vy = 0;
     }
 
     //A is pressed
     if (keyIsDown(65)) {
-      this.vx = 5;
+      if (canMoveLeft) {
+        this.vx = 5;
+      } else {
+        this.vx = 0;
+      }
     }
     //D is pressed
     else if (keyIsDown(68)) {
-      this.vx = -5;
+      if (canMoveRight) {
+        this.vx = -5;
+      } else {
+        this.vx = 0;
+      }
     } else {
       this.vx = 0;
     }
@@ -78,38 +95,38 @@ class Car {
     if (this.playerDriving && keyIsDown(87)) {
       //if A is pressed, rotate left
       if (keyIsDown(65)) {
-        this.angle-=2;
+        this.angle -= 2;
       }
       //if D is pressed, rotate right
       if (keyIsDown(68)) {
-        this.angle+=2;
+        this.angle += 2;
       }
     }
     //backing up
     if (this.playerDriving && keyIsDown(83)) {
       //if A is pressed, rotate rght
       if (keyIsDown(65)) {
-        this.angle+=2;
+        this.angle += 2;
       }
       //if D is pressed, rotate left
       if (keyIsDown(68)) {
-        this.angle-=2;
+        this.angle -= 2;
       }
     }
   }
 
   enterCar() {
-    let d = dist(width/2, height/2, this.x, this.y)
-    this.cooldown --;
+    let d = dist(width / 2, height / 2, this.x, this.y)
+    this.cooldown--;
 
     this.cooldown = constrain(this.cooldown, 0, 30);
 
-    if(keyIsDown(69) && d < this.proximityRadius/2 && this.cooldown <= 0) {
+    if (keyIsDown(69) && d < this.proximityRadius / 2 && this.cooldown <= 0) {
       this.playerDriving = !this.playerDriving;
       this.cooldown = 30;
     }
 
-    if(d < this.proximityRadius/2 && !this.playerDriving) {
+    if (d < this.proximityRadius / 2 && !this.playerDriving) {
       let eSize = 25 + 3 * sin(this.textAngle);
 
       push();

@@ -30,24 +30,41 @@ class Stone {
   }
 
   move() {
+
     //W is pressed
     if (keyIsDown(87)) {
-      this.vy = this.speed;
+      if (canMoveUp) {
+        this.vy = 5;
+      } else {
+        this.vy = 0;
+      }
     }
     //S is pressed
     else if (keyIsDown(83)) {
-      this.vy = -this.speed;
+      if (canMoveDown) {
+        this.vy = -5;
+      } else {
+        this.vy = 0;
+      }
     } else {
       this.vy = 0;
     }
 
     //A is pressed
     if (keyIsDown(65)) {
-      this.vx = this.speed;
+      if (canMoveLeft) {
+        this.vx = 5;
+      } else {
+        this.vx = 0;
+      }
     }
     //D is pressed
     else if (keyIsDown(68)) {
-      this.vx = -this.speed;
+      if (canMoveRight) {
+        this.vx = -5;
+      } else {
+        this.vx = 0;
+      }
     } else {
       this.vx = 0;
     }

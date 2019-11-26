@@ -33,7 +33,7 @@ class Enemy {
 
     this.living = true;
 
-    this.hitboxRadius = 15;
+    this.hitboxRadius = 20;
 
     this.enemyAngle = 0;
 
@@ -148,24 +148,41 @@ class Enemy {
   }
 
   move() {
+
     //W is pressed
     if (keyIsDown(87)) {
-      this.vy = 5;
+      if (canMoveUp) {
+        this.vy = 5;
+      } else {
+        this.vy = 0;
+      }
     }
     //S is pressed
     else if (keyIsDown(83)) {
-      this.vy = -5;
+      if (canMoveDown) {
+        this.vy = -5;
+      } else {
+        this.vy = 0;
+      }
     } else {
       this.vy = 0;
     }
 
     //A is pressed
     if (keyIsDown(65)) {
-      this.vx = 5;
+      if (canMoveLeft) {
+        this.vx = 5;
+      } else {
+        this.vx = 0;
+      }
     }
     //D is pressed
     else if (keyIsDown(68)) {
-      this.vx = -5;
+      if (canMoveRight) {
+        this.vx = -5;
+      } else {
+        this.vx = 0;
+      }
     } else {
       this.vx = 0;
     }

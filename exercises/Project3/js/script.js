@@ -42,7 +42,10 @@ let bullet;
 //bullet sprite
 let bulletImage;
 
-let canMove = true;
+let canMoveLeft = false;
+let canMoveRight = false;
+let canMoveUp = false;
+let canMoveDown = false;
 
 let westWall;
 let northWall;
@@ -99,15 +102,15 @@ function setup() {
 
   //create west wall object
   westWall = new Wall(50, 50, 20, 500);
-  eastWall = new Wall(550, 50, 20, 500);
+  eastWall = new Wall(530, 50, 20, 500);
   northWall = new Wall(50, 50, 500, 20);
 
-  floor = new Floor(50, 50, 500, 500);
+  floor = new Floor(60, 60, 490, 490);
 
   enemy = new Enemy(100, 100);
   enemy2 = new Enemy(150, 100);
 
-  car = new Car(width/2 + 100, height/2, carImage);
+  car = new Car(425, 300, carImage);
 }
 
 
@@ -136,9 +139,7 @@ function draw() {
 
 
 
-  westWall.checkPlayerCollision();
-  northWall.checkPlayerCollision();
-  eastWall.checkPlayerCollision();
+
 
   //shooting input (mouse click)
   bullet.handleShooting();
@@ -171,6 +172,15 @@ function draw() {
 
 
   handlePlayerInput();
+
+  canMoveUp = true;
+  canMoveDown = true;
+  canMoveLeft = true;
+  canMoveRight = true;
+
+  westWall.checkPlayerCollision();
+  northWall.checkPlayerCollision();
+  eastWall.checkPlayerCollision();
 
 if (!car.playerDriving) {
   displayPlayer();
