@@ -30,7 +30,6 @@ class Stone {
   }
 
   move() {
-    if(canMove) {
     //W is pressed
     if (keyIsDown(87)) {
       this.vy = this.speed;
@@ -56,7 +55,7 @@ class Stone {
     this.x += this.vx;
     this.y += this.vy;
   }
-}
+
 
 
 drive(car) {

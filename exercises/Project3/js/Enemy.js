@@ -36,6 +36,8 @@ class Enemy {
     this.hitboxRadius = 15;
 
     this.enemyAngle = 0;
+
+    this.playerInside = false;
   }
 
   // display
@@ -122,10 +124,26 @@ class Enemy {
 
     let d = dist(playerX, playerY, this.x, this.y)
 
-    if (d < this.visionRadius) {
+    if (d < this.visionRadius && this.playerInside) {
       this.chasing = true;
     } else {
       this.chasing = false;
+    }
+  }
+
+  checkIfPlayerInside(floor) {
+    let floorLeft = floor.x;
+    let floorRight = floor.x + floor.w;
+    let floorTop = floor.y;
+    let floorBottom = floor.y + floor.h;
+
+    let playerX = width/2;
+    let playerY = height/2;
+
+    if(playerX < floorRight && playerX > floorLeft && playerY < floorBottom && playerY > floorTop) {
+      this.playerInside = true;
+    } else {
+      this.playerInside = false;
     }
   }
 
@@ -221,6 +239,9 @@ class Enemy {
     if (d < this.hitboxRadius) {
       this.living = false;
       bullet.collided = true;
+      //"despawns" the bullet from the area
+      bullet.x = -100000;
+      bullet.y = -100000;
     }
 
   }

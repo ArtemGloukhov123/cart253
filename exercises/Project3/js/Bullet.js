@@ -124,12 +124,12 @@ class Bullet {
   drive(car) {
     //W is pressed
     if (keyIsDown(87)) {
-      this.vx = (-sin(car.angle)) * this.speed;
-      this.vy = (cos(car.angle)) * this.speed;
+      this.vx = (-sin(car.angle)) * this.speed * 0.5;
+      this.vy = (cos(car.angle)) * this.speed * 0.5;
     }
     else if (keyIsDown(83)) {
-      this.vx = -(-sin(car.angle)) * this.speed;
-      this.vy = -(cos(car.angle)) * this.speed;
+      this.vx = -(-sin(car.angle)) * this.speed * 0.5;
+      this.vy = -(cos(car.angle)) * this.speed * 0.5;
     }else {
       this.vx = 0;
       this.vy = 0;

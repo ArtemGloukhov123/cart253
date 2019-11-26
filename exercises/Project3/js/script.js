@@ -107,7 +107,7 @@ function setup() {
   enemy = new Enemy(100, 100);
   enemy2 = new Enemy(150, 100);
 
-  car = new Car(width/2, height/2, carImage);
+  car = new Car(width/2 + 100, height/2, carImage);
 }
 
 
@@ -157,16 +157,18 @@ function draw() {
   enemy.wander(floor);
   enemy.handleChasing();
   enemy.handleDeath();
+  enemy.checkIfPlayerInside(floor);
 
   enemy2.display();
   enemy2.checkIfShot(bullet);
   enemy2.wander(floor);
   enemy2.handleChasing();
   enemy2.handleDeath();
+  enemy2.checkIfPlayerInside(floor);
 
   car.display();
 
-  car.enterCar();
+
 
   handlePlayerInput();
 
@@ -191,6 +193,8 @@ if (car.playerDriving) {
   enemy.drive(car);
   enemy2.drive(car);
 }
+
+  car.enterCar();
 }
 
 

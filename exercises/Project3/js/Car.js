@@ -20,11 +20,13 @@ class Car {
 
     this.angle = 0;
 
-    this.proximityRadius = 200;
+    this.proximityRadius = 170;
 
     this.playerDriving = false;
 
     this.cooldown = 30;
+
+    this.textAngle = 0;
   }
 
   display() {
@@ -38,9 +40,9 @@ class Car {
     imageMode(CENTER);
     image(this.img, this.x, this.y);
 
-    noStroke();
-    fill(250, 0, 0, 50);
-    ellipse(this.x, this.y, this.proximityRadius);
+    //noStroke();
+    //fill(250, 0, 0, 50);
+    //ellipse(this.x, this.y, this.proximityRadius);
     pop();
 
   }
@@ -102,9 +104,23 @@ class Car {
 
     this.cooldown = constrain(this.cooldown, 0, 30);
 
-    if(keyIsDown(69) && d < this.proximityRadius && this.cooldown <= 0) {
+    if(keyIsDown(69) && d < this.proximityRadius/2 && this.cooldown <= 0) {
       this.playerDriving = !this.playerDriving;
       this.cooldown = 30;
+    }
+
+    if(d < this.proximityRadius/2 && !this.playerDriving) {
+      let eSize = 25 + 3 * sin(this.textAngle);
+
+      push();
+      fill(255);
+      textAlign(CENTER);
+      textStyle(BOLD);
+      textSize(eSize);
+      text("E", this.x, this.y);
+      pop();
+
+      this.textAngle += 5;
     }
   }
 
