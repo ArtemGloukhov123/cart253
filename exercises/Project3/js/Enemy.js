@@ -48,6 +48,7 @@ class Enemy {
     if (this.living) {
       push();
 
+
       //display vision circle
       noStroke();
 
@@ -57,14 +58,14 @@ class Enemy {
         rotate(this.enemyAngle);
         translate(-this.x, -this.y);
       }
-
+/*
       if (this.chasing) {
         fill(this.visionAggro);
       } else {
         fill(this.visionCalm);
       }
       ellipse(this.x, this.y, this.visionRadius * 2);
-
+*/
       imageMode(CENTER);
 
       if (this.walking) {
@@ -91,17 +92,17 @@ class Enemy {
     if (this.chasing) {
       if (playerX < this.x) {
         this.x -= 4;
-        this.constrainArea();
+        this.constrainArea(floor);
       } else if (playerX > this.x) {
         this.x += 4;
-        this.constrainArea();
+        this.constrainArea(floor);
       }
       if (playerY < this.y) {
         this.y -= 4;
-        this.constrainArea();
+        this.constrainArea(floor);
       } else if (playerY > this.y) {
         this.y += 4;
-        this.constrainArea();
+        this.constrainArea(floor);
       }
       this.rotateToPlayer();
     } else {
@@ -115,7 +116,7 @@ class Enemy {
       this.tx += 0.01;
       this.ty += 0.01;
     }
-    this.constrainArea();
+    this.constrainArea(floor);
   }
 
   handleChasing() {
@@ -245,7 +246,7 @@ class Enemy {
     }
   }
 
-  constrainArea() {
+  constrainArea(floor) {
     this.x = constrain(this.x, floor.x + 40, floor.x + floor.w - 40);
     this.y = constrain(this.y, floor.y + 40, floor.y + floor.h - 40);
   }
@@ -259,14 +260,15 @@ class Enemy {
       //"despawns" the bullet from the area
       bullet.x = -100000;
       bullet.y = -100000;
+      deathSound.play();
     }
 
   }
 
   handleDeath() {
     if (!this.living) {
-      this.x = -1000;
-      this.y = -1000;
+      this.x = -10000;
+      this.y = -10000;
     }
   }
 

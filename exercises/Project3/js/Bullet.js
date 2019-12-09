@@ -31,6 +31,7 @@ class Bullet {
     this.moveSpeed = 5;
 
     this.collided = false;
+
   }
 
   //when mouse is pressed, register angle for that bullet
@@ -42,6 +43,7 @@ class Bullet {
       this.collided = false;
       this.flyDirection();
       this.angleValues.push(this.angle);
+      pewSound.play();
 
       this.cooldown = this.cooldownMax;
       this.x = width / 2;

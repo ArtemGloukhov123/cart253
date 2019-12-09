@@ -27,6 +27,7 @@ class Wall {
   display() {
     push();
     noStroke();
+    fill(80);
     rectMode(CORNER);
     rect(this.x, this.y, this.w, this.h);
     pop();
@@ -130,7 +131,7 @@ checkPlayerCollision() {
   if(playerY > wallCenterY && playerY < wallBottom && playerX < wallRight && playerX > wallLeft)  {
     canMoveUp = false;
     console.log('player collided bottom side of wall');
-  } 
+  }
 }
 
 }
